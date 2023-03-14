@@ -58,8 +58,9 @@ Tunite *creeTourRoi(int posx, int posy);
 /*
 Bool tourRoiDetruite(TListePlayer player);
 void PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
-
+*/
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) ; //retourne la liste des cibles possibles
+/*
 Void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible) ;
 
 
