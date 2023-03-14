@@ -177,6 +177,7 @@ Tunite *creeTourRoi(int posx, int posy){
     //nouv->cible = NULL;
     return nouv;
 }
+
 Tunite *creeDragon(int posx, int posy){
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = dragon;
@@ -192,4 +193,9 @@ Tunite *creeDragon(int posx, int posy){
     nouv->peutAttaquer = 1;
     //nouv->cible = NULL;
     return nouv;
+}
+
+TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
+{
+
 }
