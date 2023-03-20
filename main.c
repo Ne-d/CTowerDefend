@@ -60,8 +60,8 @@ int main(int argc, char* argv[])
 
         //A COMMENTER quand vous en aurez assez de cliquer sur ces popups ^^
 
-        //message("Welcome in TowerDfend","Ceci est un point de depart pour votre future interface de votre jeu TowerDefend");
-        //message("et fin","ECHAP->quitter, S/C ET D/V les gerer les sauvegardes");
+        message("Welcome in TowerDfend","Ceci est un point de depart pour votre future interface de votre jeu TowerDefend");
+        message("et fin","ECHAP->quitter, S/C ET D/V les gerer les sauvegardes");
 
         /**********************************************************************/
         /*                                                                    */
