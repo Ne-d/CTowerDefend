@@ -50,12 +50,10 @@
 			<Add library="libSDL2" />
 			<Add directory="SDL2/x86_64-w64-mingw32/lib" />
 		</Linker>
-		<Unit filename="towerdefend.c">
+		<Unit filename="listePlayer.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="towerdefend.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="listePlayer.h" />
 		<Unit filename="maSDL.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -64,6 +62,12 @@
 		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="towerdefend.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="towerdefend.h">
+			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Extensions />
 	</Project>

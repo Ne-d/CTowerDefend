@@ -193,3 +193,10 @@ Tunite *creeDragon(int posx, int posy){
     //nouv->cible = NULL;
     return nouv;
 }
+
+TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
+{
+    TListePlayer unitesAPortee;
+
+    return unitesAPortee;
+}
