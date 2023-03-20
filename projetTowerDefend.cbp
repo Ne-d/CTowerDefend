@@ -50,10 +50,10 @@
 			<Add library="libSDL2" />
 			<Add directory="SDL2/x86_64-w64-mingw32/lib" />
 		</Linker>
-		<Unit filename="listePlayer.c">
+		<Unit filename="listeSimple.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="listePlayer.h" />
+		<Unit filename="listeSimple.h" />
 		<Unit filename="maSDL.c">
 			<Option compilerVar="CC" />
 		</Unit>
