@@ -269,5 +269,5 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 }*/
 
 void printUnite(Tunite u) {
-
+    printf("Nom: %s", u.nom);
 }
