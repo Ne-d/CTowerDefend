@@ -2028,8 +2028,9 @@
 1679401706 c:\users\utilisateur\desktop\l2\prog en c\ctowerdefend\masdl.h
 	"towerdefend.h"
 
-1679406945 c:\users\utilisateur\desktop\l2\prog en c\ctowerdefend\towerdefend.h
+1679407391 c:\users\utilisateur\desktop\l2\prog en c\ctowerdefend\towerdefend.h
 	"stdbool.h"
+	"towerDefendTypes.h"
 
 1679401706 source:c:\users\utilisateur\desktop\l2\prog en c\ctowerdefend\masdl.c
 	"SDL.h"

@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 
     int** tabParcours=initChemin();  //tabParcours est un tableau de NBCOORDPARCOURS cases, chacune contenant un tableau à 2 cases (indice 0 pour X, indice 1 pour Y)
 
-    if ( pSpriteTourSol )  //si le permier sprite a bien été chargé, on suppose que les autres aussi
+    if ( pSpriteTourSol )  //si le premier sprite a bien été chargé, on suppose que les autres aussi
     {
         TplateauJeu jeu = AlloueTab2D(LARGEURJEU,HAUTEURJEU);
         initPlateauAvecNULL(jeu,LARGEURJEU,HAUTEURJEU);
