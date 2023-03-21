@@ -27,7 +27,5 @@ void swapPtrData(T_liste source, T_liste destination);
 int getNbreCell(T_liste l);
 int getSizeBytes(T_liste l);
 
-T_liste findCell(T_liste l, int data);
-int getOccurrences(T_liste l, int data);
 
 #endif // LISTESIMPLE_H_INCLUDED

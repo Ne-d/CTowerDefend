@@ -159,3 +159,146 @@ T_liste ajoutEnFin(T_liste l, Tunite mydata)
     return l;
 }*/
 
+T_liste suppEnTete(T_liste l)
+{
+    if (listeVide(l))
+    {
+        return l;
+    }
+    else
+    {
+        T_liste newFirst = NULL;
+
+        newFirst = l->suiv;
+
+        free(l->pdata);
+        free(l);
+
+        return newFirst;
+    }
+}
+
+T_liste suppEnFin(T_liste l)
+{
+    // If the list is empty
+    if (listeVide(l))
+    {
+        return l;
+    }
+    else
+    {
+        // If the list has one cell
+        if(l->suiv == NULL)
+        {
+            free(l->pdata);
+            free(l);
+
+            return NULL;
+        }
+
+        // Else, the list has more than one cell
+
+        T_liste lastCell = l;
+
+        while(lastCell->suiv != NULL)
+        {
+            lastCell = lastCell->suiv;
+        }
+
+        free(lastCell->pdata);
+        free(lastCell);
+
+        return l;
+    }
+}
+
+/*T_liste suppEnN(T_liste l, int pos)
+{
+    // If the list is empty
+    if(listeVide(l))
+    {
+        return NULL;
+    }
+
+    // If the list has only one cell
+    if(l->suiv == NULL)
+    {
+        free(l->pdata);
+        free(l);
+        return NULL;
+    }
+
+    // Else, the list must have more than one cell
+
+    // Find the desired cell (at position "pos")
+    bool reachedLastCell = false;
+    T_liste desiredCell = findCell_old(l, pos, &reachedLastCell);
+
+    // If the desired cell is the first
+    if (desiredCell->prec == NULL) {
+        T_liste newFirst = l->suiv;
+        newFirst->prec = NULL;
+
+        free(l->pdata);
+        free(l);
+
+        return newFirst;
+    }
+
+    // If the desired cell is the last
+    if(desiredCell->suiv == NULL) {
+        desiredCell->prec->suiv = NULL;
+
+        free(desiredCell->pdata);
+        free(desiredCell);
+
+        return l;
+    }
+    // If the desired cell is somewhere in the middle
+    else
+    {
+        desiredCell->prec->suiv = desiredCell->suiv;
+        desiredCell->suiv->prec = desiredCell->prec;
+
+        free(desiredCell->pdata);
+        free(desiredCell);
+
+        // TODO: Fix the "Use of memory after is it freed" warning.
+        return l;
+    }
+}*/
+
+void swapPtrData(T_liste source, T_liste destination)
+{
+    int* oldSourceData = source->pdata;
+
+    source->pdata = destination->pdata;
+    destination->pdata = oldSourceData;
+
+}
+
+int getNbreCell(T_liste l)
+{
+    if(listeVide(l))
+    {
+        return 0;
+    }
+
+    else
+    {
+        int i = 1;
+
+        while(l->suiv != NULL)
+        {
+            l = l->suiv;
+            i++;
+        }
+
+        return i;
+    }
+}
+
+int getSizeBytes(T_liste l)
+{
+    return getNbreCell(l) * (sizeof(struct T_cell) * sizeof(int));
+}
