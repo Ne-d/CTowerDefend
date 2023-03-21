@@ -1616,11 +1616,12 @@
 	"SDL.h"
 	"towerdefend.h"
 
-1679330859 source:d:\users\ned\fac\c\ctowerdefend\listesimple.c
+1679332318 source:d:\users\ned\fac\c\ctowerdefend\listesimple.c
 	<stdlib.h>
 	"listeSimple.h"
+	"towerDefendTypes.h"
 
-1679330849 d:\users\ned\fac\c\ctowerdefend\listesimple.h
+1679331441 d:\users\ned\fac\c\ctowerdefend\listesimple.h
 	<stdbool.h>
 	"towerDefendTypes.h"
 
