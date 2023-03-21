@@ -244,16 +244,11 @@ T_liste suppEnN(T_liste l, int pos)
     // Find the desired cell (at position "pos")
     T_liste desiredCell = l;
     T_liste desiredCellPrec = l;
-    bool reachedLastCell = false;
     for(int i = 0; i < pos; i++)
     {
         if(desiredCell->suiv != NULL)
         {
             desiredCell = desiredCell->suiv;
-        }
-        else
-        {
-            reachedLastCell = true;
         }
         if(desiredCellPrec->suiv->suiv != NULL || i < pos - 1)
         {
