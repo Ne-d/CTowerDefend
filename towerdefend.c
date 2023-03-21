@@ -252,17 +252,21 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 
 //Delete the unit when his health go to 0, if it's the last unit it's become NULL
 /*void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu){
+    if(UniteDetruite == getPtrLastCell(player)){
+        suppEnFin(player);
+    }
     if(UniteDetruite->pointsDeVie <=0){
         if(player->suiv == NULL){
             player->pdata = NULL;
         }
+        free(UniteDetruite->pdata);
         free(UniteDetruite);
     }
 }*/
 
 /*void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
     TListePlayer cible = quiEstAPortee(jeu, UniteAttaquante);
-    if(UniteAttaquante->peutAttaquer = 1){
+    if(UniteAttaquante->peutAttaquer == 1){
     cible->pdata->pointsDeVie = cible->pdata->pointsDeVie - UniteAttaquante->degats;
     UniteAttaquante->peutAttaquer = 0;
     }
