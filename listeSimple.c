@@ -109,13 +109,14 @@ T_liste ajoutEnFin(T_liste l, Tunite mydata)
     return l;
 }
 
-/*T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
+T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
 {
     if(listeVide(l)) // If l is empty
     {
         // Set the value of the first cell
         // Same as ajoutEnTete without boilerplate
         l->suiv = NULL;
+        l->pdata = malloc(sizeof(Tunite));
         *(l->pdata) = mydata;
     }
     else if(pos == 0)
@@ -142,7 +143,17 @@ T_liste ajoutEnFin(T_liste l, Tunite mydata)
 
         // Find the cell at desired position
         bool reachedLastCell = false;
-        desiredCell = findCell_old(l, pos, &reachedLastCell);
+        for(int i = 0; i < pos; i++)
+        {
+            if(desiredCell->suiv != NULL)
+            {
+                desiredCell = desiredCell->suiv;
+            }
+            else
+            {
+                reachedLastCell = true;
+            }
+        }
 
         if(reachedLastCell)
         {
@@ -157,7 +168,7 @@ T_liste ajoutEnFin(T_liste l, Tunite mydata)
     }
 
     return l;
-}*/
+}
 
 T_liste suppEnTete(T_liste l)
 {
@@ -212,7 +223,7 @@ T_liste suppEnFin(T_liste l)
     }
 }
 
-/*T_liste suppEnN(T_liste l, int pos)
+T_liste suppEnN(T_liste l, int pos)
 {
     // If the list is empty
     if(listeVide(l))
@@ -231,23 +242,28 @@ T_liste suppEnFin(T_liste l)
     // Else, the list must have more than one cell
 
     // Find the desired cell (at position "pos")
+    T_liste desiredCell = l;
+    T_liste desiredCellPrec = l;
     bool reachedLastCell = false;
-    T_liste desiredCell = findCell_old(l, pos, &reachedLastCell);
-
-    // If the desired cell is the first
-    if (desiredCell->prec == NULL) {
-        T_liste newFirst = l->suiv;
-        newFirst->prec = NULL;
-
-        free(l->pdata);
-        free(l);
-
-        return newFirst;
+    for(int i = 0; i < pos; i++)
+    {
+        if(desiredCell->suiv != NULL)
+        {
+            desiredCell = desiredCell->suiv;
+        }
+        else
+        {
+            reachedLastCell = true;
+        }
+        if(desiredCellPrec->suiv->suiv != NULL || i < pos - 1)
+        {
+            desiredCellPrec = desiredCellPrec->suiv;
+        }
     }
 
     // If the desired cell is the last
     if(desiredCell->suiv == NULL) {
-        desiredCell->prec->suiv = NULL;
+        desiredCellPrec->suiv = NULL;
 
         free(desiredCell->pdata);
         free(desiredCell);
@@ -257,16 +273,14 @@ T_liste suppEnFin(T_liste l)
     // If the desired cell is somewhere in the middle
     else
     {
-        desiredCell->prec->suiv = desiredCell->suiv;
-        desiredCell->suiv->prec = desiredCell->prec;
+        desiredCellPrec->suiv = desiredCell->suiv;
 
         free(desiredCell->pdata);
         free(desiredCell);
 
-        // TODO: Fix the "Use of memory after is it freed" warning.
         return l;
     }
-}*/
+}
 
 void swapPtrData(T_liste source, T_liste destination)
 {
