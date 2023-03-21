@@ -12,7 +12,6 @@ void afficheListe(T_liste l);
 
 T_liste getPtrLastCell(T_liste l);
 T_liste getPtrNextCell(T_liste l);
-T_liste getPtrPrevCell(T_liste l);
 Tunite* getPtrData(T_liste l);
 
 T_liste ajoutEnTete(T_liste l, Tunite mydata);
