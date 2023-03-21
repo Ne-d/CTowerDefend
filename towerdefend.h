@@ -35,8 +35,8 @@ Tunite *creeDragon(int posx, int posy);
 Tunite *creeChevalier(int posx, int posy);
 
 /*
-Void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite);
-Void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite);
+void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite);
+void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite);
 
 */
 
