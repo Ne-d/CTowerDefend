@@ -63,6 +63,13 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="testListeSimple.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="testListeSimple.h" />
+		<Unit filename="towerDefendTypes.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="towerDefendTypes.h" />
 		<Unit filename="towerdefend.c">
 			<Option compilerVar="CC" />

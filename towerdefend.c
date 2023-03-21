@@ -271,7 +271,3 @@ bool tourRoiDetruite(TListePlayer playerRoi){
     UniteAttaquante->peutAttaquer = 0;
     }
 }*/
-
-void printUnite(Tunite u) {
-    printf("Nom: %s", u.nom);
-}

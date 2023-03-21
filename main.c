@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "maSDL.h"    //bibliothèque avec des fonctions d'affichage utilisant la SDL
 #include "towerdefend.h"
+#include "testListeSimple.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -13,6 +14,11 @@
 /*--------- Main ---------------------*/
 int main(int argc, char* argv[])
 {
+    if(testListeSimple() == 1)
+    {
+        return 1;
+    }
+
     SDL_Window *pWindow;
     SDL_Init(SDL_INIT_VIDEO);
 

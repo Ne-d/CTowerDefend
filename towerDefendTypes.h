@@ -38,5 +38,8 @@ typedef struct T_cell{
 
 typedef Tunite* ** TplateauJeu;  ////tableau a deux dimensions de largeur 11 et hauteur 19 contenant des pointeurs (Tunite*)
 
+char* stringUniteDuJeu(TuniteDuJeu u);
+char* stringCible(Tcible c);
+void printUnite(Tunite u);
 
 #endif // TOWERDEFENDTYPES_H_INCLUDED

@@ -27,7 +27,7 @@ void afficheListe(T_liste l)
 
         while(!listeVide(courant))
         {
-            printf("%d ", *getPtrData(courant));
+            printUnite(*getPtrData(courant));
             courant = getPtrNextCell(courant);
         }
         printf("]\n");
