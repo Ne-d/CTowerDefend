@@ -75,4 +75,7 @@ Void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite);
 
 */
 
+// Debug
+void printUnite(Tunite u);
+
 #endif // TOWERDEFEND_H_INCLUDED

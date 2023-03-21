@@ -270,7 +270,7 @@ T_liste suppEnFin(T_liste l)
 
 void swapPtrData(T_liste source, T_liste destination)
 {
-    int* oldSourceData = source->pdata;
+    Tunite* oldSourceData = source->pdata;
 
     source->pdata = destination->pdata;
     destination->pdata = oldSourceData;
