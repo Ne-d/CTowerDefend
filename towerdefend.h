@@ -63,16 +63,14 @@ bool tourRoiDetruite(TListePlayer player);
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) ; //retourne la liste des cibles possibles
 Void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible) ;
 
-
+*/
 Tunite *creeArcher(int posx, int posy);
 Tunite *creeGargouille(int posx, int posy);
-*/
 Tunite *creeDragon(int posx, int posy);
-/*
 Tunite *creeChevalier(int posx, int posy);
 
+/*
 Void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite);
-Tunite AcheteUnite(int *elixirEnStockduJoueur);
 Void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite);
 
 */

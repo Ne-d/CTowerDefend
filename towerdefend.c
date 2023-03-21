@@ -184,9 +184,60 @@ Tunite *creeDragon(int posx, int posy){
     nouv->maposition = air;
     nouv->pointsDeVie = 200;
     nouv->vitesseAttaque = 1.1;
-    nouv->degats = 180;
+    nouv->degats = 70;
     nouv->portee = 2;
-    nouv->vitessedeplacement = 2;
+    nouv->vitessedeplacement = 2.0;
+    nouv->posX = posx;
+    nouv->posY = posy;
+    nouv->peutAttaquer = 1;
+    //nouv->cible = NULL;
+    return nouv;
+}
+
+Tunite *creeArcher(int posx, int posy){
+    Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
+    nouv->nom = archer;
+    nouv->cibleAttaquable = solEtAir;
+    nouv->maposition = sol;
+    nouv->pointsDeVie = 80;
+    nouv->vitesseAttaque = 0.7;
+    nouv->degats = 120;
+    nouv->portee = 3;
+    nouv->vitessedeplacement = 1.0;
+    nouv->posX = posx;
+    nouv->posY = posy;
+    nouv->peutAttaquer = 1;
+    //nouv->cible = NULL;
+    return nouv;
+}
+
+Tunite *creeGargouille(int posx, int posy){
+    Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
+    nouv->nom = gargouille;
+    nouv->cibleAttaquable = solEtAir;
+    nouv->maposition = air;
+    nouv->pointsDeVie = 80;
+    nouv->vitesseAttaque = 0.6;
+    nouv->degats = 90;
+    nouv->portee = 1;
+    nouv->vitessedeplacement = 3.0;
+    nouv->posX = posx;
+    nouv->posY = posy;
+    nouv->peutAttaquer = 1;
+    //nouv->cible = NULL;
+    return nouv;
+}
+
+Tunite *creeChevalier(int posx, int posy){
+    Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
+    nouv->nom = chevalier;
+    nouv->cibleAttaquable = sol;
+    nouv->maposition = sol;
+    nouv->pointsDeVie = 400;
+    nouv->vitesseAttaque = 1.5;
+    nouv->degats = 250;
+    nouv->portee = 1;
+    nouv->vitessedeplacement = 2.0;
     nouv->posX = posx;
     nouv->posY = posy;
     nouv->peutAttaquer = 1;
