@@ -6,7 +6,7 @@
 
 #define LARGEURJEU 11
 #define HAUTEURJEU 19
-#define NBCOORDPARCOURS 35
+#define NBCOORDPARCOURS 34
 #define X 0
 #define Y 1
 

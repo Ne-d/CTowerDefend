@@ -85,12 +85,12 @@ int **initChemin(){
         chemin[j] = (int*)malloc(sizeof(int)*2);  //2 cases :indice 0 pour la coord en X, indice 1 pour la coord en Y
     }
 
-    int ydepart = 19;  //19 on part du bas
+    int ydepart = 18;  //18 on part du bas
     int xdepart = 5;  //5 = milieu de la fenetre de 11 de largeur (0-10)
     int i = 0;  //parcourt les i cases du chemin
     int distanceMaxRestante = NBCOORDPARCOURS;
 
-    ecritCheminVersleHaut(chemin, &i, &xdepart, &ydepart, 4, &distanceMaxRestante);
+    ecritCheminVersleHaut(chemin, &i, &xdepart, &ydepart, 3, &distanceMaxRestante);
     ecritCheminVerslaDroite(chemin, &i, &xdepart, &ydepart, 4, &distanceMaxRestante);
     ecritCheminVersleHaut(chemin, &i, &xdepart, &ydepart, 4, &distanceMaxRestante);
     ecritCheminVerslaGauche(chemin, &i, &xdepart, &ydepart, 5, &distanceMaxRestante);
