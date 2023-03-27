@@ -56,7 +56,6 @@ void afficheListeShort(T_liste l)
         {
             printf("Unite %d: ", i);
             printUniteShort(*getPtrData(courant));
-            printf("\n");
 
             courant = getPtrNextCell(courant);
             i++;
@@ -241,15 +240,16 @@ T_liste suppEnFin(T_liste l)
 
         // Else, the list has more than one cell
 
-        T_liste lastCell = l;
+        T_liste secondToLastCell = l;
 
-        while(lastCell->suiv != NULL)
+        while(secondToLastCell->suiv->suiv != NULL)
         {
-            lastCell = lastCell->suiv;
+            secondToLastCell = secondToLastCell->suiv;
         }
 
-        free(lastCell->pdata);
-        free(lastCell);
+        free(secondToLastCell->suiv->pdata);
+        free(secondToLastCell->suiv);
+        secondToLastCell->suiv = NULL;
 
         return l;
     }
@@ -274,36 +274,35 @@ T_liste suppEnN(T_liste l, int pos)
     // Else, the list must have more than one cell
 
     // Find the desired cell (at position "pos")
-    T_liste desiredCell = l;
-    T_liste desiredCellPrec = l;
+    T_liste desiredCellPrev = l;
     for(int i = 0; i < pos; i++)
     {
-        if(desiredCell->suiv != NULL)
+        if(desiredCellPrev->suiv->suiv != NULL || i < pos - 1)
         {
-            desiredCell = desiredCell->suiv;
-        }
-        if(desiredCellPrec->suiv->suiv != NULL || i < pos - 1)
-        {
-            desiredCellPrec = desiredCellPrec->suiv;
+            desiredCellPrev = desiredCellPrev->suiv;
         }
     }
 
     // If the desired cell is the last
-    if(desiredCell->suiv == NULL) {
-        desiredCellPrec->suiv = NULL;
+    if(desiredCellPrev->suiv->suiv == NULL) {
+        free(desiredCellPrev->suiv->pdata);
+        free(desiredCellPrev->suiv);
 
-        free(desiredCell->pdata);
-        free(desiredCell);
+        desiredCellPrev->suiv = NULL;
 
         return l;
     }
     // If the desired cell is somewhere in the middle
     else
     {
-        desiredCellPrec->suiv = desiredCell->suiv;
+        // Holds a pointer to the cell after the one we delete
+        T_liste newSuiv = desiredCellPrev->suiv->suiv;
 
-        free(desiredCell->pdata);
-        free(desiredCell);
+        // Free the cell we want to remove
+        free(desiredCellPrev->suiv->pdata);
+        free(desiredCellPrev->suiv);
+
+        desiredCellPrev->suiv = newSuiv;
 
         return l;
     }
