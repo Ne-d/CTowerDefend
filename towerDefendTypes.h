@@ -41,5 +41,6 @@ typedef Tunite* ** TplateauJeu;  ////tableau a deux dimensions de largeur 11 et 
 char* stringUniteDuJeu(TuniteDuJeu u);
 char* stringCible(Tcible c);
 void printUnite(Tunite u);
+void printUniteShort(Tunite u);
 
 #endif // TOWERDEFENDTYPES_H_INCLUDED

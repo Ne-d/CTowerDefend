@@ -9,6 +9,7 @@ typedef TListePlayer T_liste;
 void initListe(T_liste *l);
 bool listeVide(T_liste l);
 void afficheListe(T_liste l);
+void afficheListeShort(T_liste l);
 
 T_liste getPtrLastCell(T_liste l);
 T_liste getPtrNextCell(T_liste l);

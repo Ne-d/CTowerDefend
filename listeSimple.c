@@ -17,20 +17,51 @@ void afficheListe(T_liste l)
 {
     if(listeVide(l))
     {
-        printf("%s", "[]\n");
+        printf("afficheListe: Liste vide.\n\n");
     }
     else
     {
+        unsigned int i = 0;
         T_liste courant = l;
 
-        printf("[ ");
+        printf("Affiche Liste:\n");
 
         while(!listeVide(courant))
         {
+            printf("Unite %d:\n", i);
             printUnite(*getPtrData(courant));
+            printf("\n");
+
             courant = getPtrNextCell(courant);
+            i++;
         }
-        printf("]\n");
+        printf("\n");
+    }
+}
+
+void afficheListeShort(T_liste l)
+{
+    if(listeVide(l))
+    {
+        printf("afficheListe Short: Liste vide.\n\n");
+    }
+    else
+    {
+        unsigned int i = 0;
+        T_liste courant = l;
+
+        printf("Affiche Liste Short:\n");
+
+        while(!listeVide(courant))
+        {
+            printf("Unite %d: ", i);
+            printUniteShort(*getPtrData(courant));
+            printf("\n");
+
+            courant = getPtrNextCell(courant);
+            i++;
+        }
+        printf("\n");
     }
 }
 
@@ -56,7 +87,7 @@ Tunite* getPtrData(T_liste l)
 
 T_liste ajoutEnTete(T_liste l, Tunite mydata)
 {
-    // Create a new cell to work with and the corresponding unit pointer.
+    // Create a new cell to work with and the corresponding pointer to a unit.
     T_liste newLst = malloc(sizeof(struct T_cell));
     newLst->pdata = malloc(sizeof(Tunite));
 
@@ -139,15 +170,15 @@ T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
         *(newCell->pdata) = mydata;
 
         // This will hold a pointer to the desired cell of l
-        T_liste desiredCell = l;
+        T_liste desiredCellPrev = l;
 
-        // Find the cell at desired position
+        // Find the cell before the desired position
         bool reachedLastCell = false;
-        for(int i = 0; i < pos; i++)
+        for(int i = 0; i < pos - 1; i++)
         {
-            if(desiredCell->suiv != NULL)
+            if(desiredCellPrev->suiv != NULL)
             {
-                desiredCell = desiredCell->suiv;
+                desiredCellPrev = desiredCellPrev->suiv;
             }
             else
             {
@@ -159,11 +190,12 @@ T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
         {
             // ajoutEnFin, without boilerplate
             newCell->suiv = NULL;
-            desiredCell->suiv = newCell;
+            desiredCellPrev->suiv = newCell;
         }
         else
         {
-            newCell->suiv = desiredCell;
+            newCell->suiv = desiredCellPrev->suiv;
+            desiredCellPrev->suiv = newCell;
         }
     }
 

@@ -277,3 +277,4 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
     player->pdata = nouvelleUnite;
 }
+*/

@@ -43,16 +43,21 @@ char* stringCible(Tcible c) {
 }
 
 void printUnite(Tunite u) {
-    printf("Type d'unité: %s\n", stringUniteDuJeu(u.nom));
+    printf("Type d'unite: %s\n", stringUniteDuJeu(u.nom));
     printf("Cibles attaquable: %s\n", stringCible(u.cibleAttaquable));
     printf("Position: %s\n", stringCible(u.maposition));
 
     printf("PV: %d\n", u.pointsDeVie);
     printf("Vitesse d'attaque: %f\n", u.vitesseAttaque);
-    printf("Dégats: %d\n", u.degats);
-    printf("Portée: %d\n", u.portee);
+    printf("Degats: %d\n", u.degats);
+    printf("Portee: %d\n", u.portee);
 
-    printf("Vitesse de déplacement: %f\n", u.vitessedeplacement);
+    printf("Vitesse de deplacement: %f\n", u.vitessedeplacement);
     printf("Position: %d, %d\n", u.posX, u.posY);
     printf("Peut attaquer: %s\n", u.peutAttaquer ? "Oui" : "Non");
+}
+
+void printUniteShort(Tunite u)
+{
+    printf("Type d'unite: %s\n", stringUniteDuJeu(u.nom));
 }
