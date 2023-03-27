@@ -252,7 +252,7 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 
 //Delete the unit when his health go to 0, if it's the last unit it's become NULL
 /*void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu){
-    if(UniteDetruite == getPtrLastCell(player)){
+    if(UniteDetruite == getPtrLastCell(player) && UniteDetruite->pointsDeVie <=0){
         suppEnFin(player);
     }
     if(UniteDetruite->pointsDeVie <=0){
