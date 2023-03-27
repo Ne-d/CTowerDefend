@@ -276,11 +276,3 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
     player->pdata = nouvelleUnite;
 }
-
-void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite){
-    while (player->pdata == UniteDetruite){
-        getPtrNextCell(player);
-    }
-    free(player->pdata);
-    free(player);
-}*/
