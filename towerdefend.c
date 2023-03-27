@@ -255,13 +255,14 @@ bool tourRoiDetruite(TListePlayer playerRoi){
     if(UniteDetruite == getPtrLastCell(player) && UniteDetruite->pointsDeVie <=0){
         suppEnFin(player);
     }
-    if(UniteDetruite->pointsDeVie <=0){
+    while(UniteDetruite->pointsDeVie != 0){
+        getPtrNextCell(player);
+    }
         if(player->suiv == NULL){
             player->pdata = NULL;
         }
         free(UniteDetruite->pdata);
         free(UniteDetruite);
-    }
 }*/
 
 /*void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
