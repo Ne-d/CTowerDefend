@@ -271,13 +271,19 @@ T_liste suppEnN(T_liste l, int pos)
         return NULL;
     }
 
-    // Else, the list must have more than one cell
-
-    // Find the desired cell (at position "pos")
-    T_liste desiredCellPrev = l;
-    for(int i = 0; i < pos; i++)
+    // If the desired cell is the first
+    if(pos == 0)
     {
-        if(desiredCellPrev->suiv->suiv != NULL || i < pos - 1)
+        l = suppEnTete(l);
+
+        return l;
+    }
+
+    // Find the cell before the desired desired cell (at position "pos")
+    T_liste desiredCellPrev = l;
+    for(int i = 1; i < pos; i++)
+    {
+        if(desiredCellPrev->suiv->suiv != NULL)
         {
             desiredCellPrev = desiredCellPrev->suiv;
         }
@@ -285,13 +291,11 @@ T_liste suppEnN(T_liste l, int pos)
 
     // If the desired cell is the last
     if(desiredCellPrev->suiv->suiv == NULL) {
-        free(desiredCellPrev->suiv->pdata);
-        free(desiredCellPrev->suiv);
-
-        desiredCellPrev->suiv = NULL;
+        l = suppEnFin(l);
 
         return l;
     }
+
     // If the desired cell is somewhere in the middle
     else
     {

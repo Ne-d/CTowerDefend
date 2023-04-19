@@ -41,7 +41,6 @@ int testListeSimple() {
     l = ajoutEnTete(l, testUnitRoi);
 
     l = ajoutEnN(l, 1, testUnit);
-    l = ajoutEnN(l, 1, testUnit);
     l = ajoutEnN(l, 1, testUnitRoi);
     l = ajoutEnN(l, 1, testUnit);
 
@@ -49,13 +48,13 @@ int testListeSimple() {
 
     afficheListeShort(l);
 
-    l = suppEnTete(l);
+    //l = suppEnTete(l);
 
-    l = suppEnFin(l);
+    //l = suppEnFin(l);
 
-    l = suppEnN(l, 0);
+    afficheListeShort(l);
 
-    // TODO: Fix the 1 offset in suppEnN.
+    l = suppEnN(l, 5);
 
     afficheListeShort(l);
     return 0;

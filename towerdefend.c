@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "SDL.h"
 #include "towerdefend.h"
+#include "listeSimple.h"
 
 
 //typedef Tunite* ** TplateauJeu;
@@ -145,6 +146,7 @@ Tunite *creeTourSol(int posx, int posy){
     //nouv->cible = NULL;
     return nouv;
 }
+
 Tunite *creeTourAir(int posx, int posy){
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = tourAir;
@@ -161,6 +163,7 @@ Tunite *creeTourAir(int posx, int posy){
     //nouv->cible = NULL;
     return nouv;
 }
+
 Tunite *creeTourRoi(int posx, int posy){
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = tourRoi;
@@ -177,6 +180,7 @@ Tunite *creeTourRoi(int posx, int posy){
     //nouv->cible = NULL;
     return nouv;
 }
+
 Tunite *creeDragon(int posx, int posy){
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = dragon;
@@ -265,16 +269,73 @@ bool tourRoiDetruite(TListePlayer playerRoi){
         free(UniteDetruite);
 }*/
 
-/*void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
+/*
+void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
     TListePlayer cible = quiEstAPortee(jeu, UniteAttaquante);
     if(UniteAttaquante->peutAttaquer == 1){
     cible->pdata->pointsDeVie = cible->pdata->pointsDeVie - UniteAttaquante->degats;
     UniteAttaquante->peutAttaquer = 0;
     }
-}*/
+}
+*/
 
 /*
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
     player->pdata = nouvelleUnite;
 }
 */
+
+// TODO: This is untested.
+TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
+    TListePlayer l;
+    initListe(&l);
+
+    // Loop through all coordinates of the TplateauJeu
+    // TODO: This could be made more efficient by only looking at a square around the attacking unit.
+    for(unsigned int i = 0; i < LARGEURJEU; i++) // X coordinate
+    {
+        for(unsigned int j = 0; j < HAUTEURJEU; i++) // Y coordinate
+        {
+            Tunite* cible = jeu[i][j];
+
+            // Checking if the target is in a position we can attack (ground or air, not coordinates)
+            if(UniteAttaquante->cibleAttaquable == cible->maposition || UniteAttaquante->cibleAttaquable == solEtAir)
+            {
+                bool cibleIsEnemy = false;
+
+                // Checking if the attacker is in the king's team and the target is in the horde.
+                if( (UniteAttaquante->nom == tourRoi || UniteAttaquante->nom == tourSol || UniteAttaquante->nom == tourAir) &&
+                    (cible->nom == archer || cible->nom == chevalier || cible->nom == dragon || cible->nom == gargouille) )
+                {
+                    cibleIsEnemy = true;
+                }
+
+                // Alternatively, checking if the attacker is in the horde and the target is the king's tower
+                // (they don't attack the other towers)
+                if( (UniteAttaquante->nom == archer || UniteAttaquante->nom == chevalier ||
+                    UniteAttaquante->nom == dragon || UniteAttaquante->nom == gargouille) &&
+                    (cible->nom == tourRoi || cible->nom == tourSol || cible->nom == tourAir) )
+                {
+                    cibleIsEnemy = true;
+                }
+                // This feels overly complicated, but I haven't found anything better.
+
+                if(cibleIsEnemy)
+                {
+                    int deltaX = UniteAttaquante->posX - cible->posX;
+                    int deltaY = UniteAttaquante->posY - cible->posY;
+                    int distanceSquared = abs(deltaX * deltaX + deltaY * deltaY);
+
+                    // Checking if the target is in range but is not the attacker itself
+                    if(distanceSquared <= (UniteAttaquante->portee * UniteAttaquante->portee) && distanceSquared != 0)
+                    {
+                        l = ajoutEnTete(l, *cible);
+                    }
+                }
+            }
+        }
+    }
+
+    return l;
+
+}

@@ -23,12 +23,13 @@ Tunite *creeTourRoi(int posx, int posy);
 
 
 bool tourRoiDetruite(TListePlayer player);
-/*void PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
+//void PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
+
 
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) ; //retourne la liste des cibles possibles
-void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible) ;
+//void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible) ;
 
-*/
+
 Tunite *creeArcher(int posx, int posy);
 Tunite *creeGargouille(int posx, int posy);
 Tunite *creeDragon(int posx, int posy);
