@@ -276,6 +276,23 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
     }
 }
 
+// AJOUTER LES COORDONNEES
+// A test
+Tunite createUnit(TListePlayer playerRoi, TListePlayer player){
+    int randNbR = rand()%100;
+    int randNbH = rand()%100;
+    if(randNbR > 50){
+        if((rand()%100) > 50) AjouterUnite(playerRoi, creeTourAir());
+        else AjouterUnite(playerRoi, creeTourSol());
+    }
+    if(randNbH > 50){
+        int valueUnit = rand()%100;
+        if(valueUnit < 25) AjouterUnite(player, creeGargouille());
+        else if(valueUnit > 25 && valueUnit < 50) AjouterUnite(player, creeArcher());
+             else if(valueUnit > 50 && valueUnit < 75) AjouterUnite(player, creeChevalier());
+                  else AjouterUnite(player, creeDragon());
+    }
+}
 
 //A test
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
