@@ -14,11 +14,6 @@
 /*--------- Main ---------------------*/
 int main(int argc, char* argv[])
 {
-    if(testListeSimple() == 1)
-    {
-        return 1;
-    }
-
     SDL_Window *pWindow;
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -58,23 +53,23 @@ int main(int argc, char* argv[])
         initPlateauAvecNULL(jeu,LARGEURJEU,HAUTEURJEU);
         affichePlateauConsole(jeu,LARGEURJEU,HAUTEURJEU);
 
-
-
         prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
         maj_fenetre(pWindow);
 
 
-        //A COMMENTER quand vous en aurez assez de cliquer sur ces popups ^^
-
-        //message("Welcome in TowerDfend","Ceci est un point de depart pour votre future interface de votre jeu TowerDefend");
-        //message("et fin","ECHAP->quitter, S/C ET D/V les gerer les sauvegardes");
-
         /**********************************************************************/
         /*                                                                    */
         /*              DEFINISSEZ/INITIALISER ICI VOS VARIABLES              */
-        /*
-        // FIN de vos variables                                                              */
+
+           TListePlayer roi;
+           TListePlayer horde;
+
+           initListe(&roi);
+           initListe(&horde);
+
+        /* FIN de vos variables                                               */
         /**********************************************************************/
+
 
         // boucle principale du jeu
         int cont = 1;
@@ -89,15 +84,13 @@ int main(int argc, char* argv[])
                 /*                                                                     */
                 //APPELEZ ICI VOS FONCTIONS QUI FONT EVOLUER LE JEU
 
-                //a supprimer, c'est juste pour attirer votre attention sur comment est gérer le chemin (un tableau 2D de coordonnées)(regarder le corps de afficheCoordonneesParcours)
-                afficheCoordonneesParcours(tabParcours,NBCOORDPARCOURS);
-
                 /* dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque
 
                 //exemple d'appel de dessineAttaque (factice car les unités n'appartiennent pas ici à aucune liste d'unité (ni à la horde ni au Roi)
                 // c'est juste pour la démo, a supprimer donc
                 */
 
+                /*
                 if (unique % 10 == 0) {
                          printf("dessine Attaque %d\n", unique);
                          dessineAttaque(pWinSurf, creeTourAir(4,15),creeDragon(5,17));
@@ -105,6 +98,7 @@ int main(int argc, char* argv[])
                          unique++;
                 } else printf("dessine Attaque %d\n", unique);
                 unique++;
+                */
 
                 // utiliser dessineAttaque dans votre fonction de combat va vous obliger à ajouter un argument lié à la SDL
                 // -> SDL_Surface *surface
