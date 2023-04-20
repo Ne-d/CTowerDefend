@@ -255,29 +255,27 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 }
 
 //Delete the unit when his health go to 0, if it's the last unit it's become NULL
-/*void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu){
-    if(UniteDetruite == getPtrLastCell(player) && UniteDetruite->pointsDeVie <=0){
-        suppEnFin(player);
-    }
-    while(UniteDetruite->pointsDeVie != 0){
-        getPtrNextCell(player);
-    }
-        if(player->suiv == NULL){
-            player->pdata = NULL;
+//Pas Test
+void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu){
+    TListePlayer* new_list = player;
+    int index = 0;
+    if(UniteDetruite->pointsDeVie <=0){
+        while(UniteDetruite->posX != getPtrData(*new_list)->posX && UniteDetruite->posY != getPtrData(*new_list)->posY && getPtrNextCell(*new_list) != NULL){
+            *new_list = getPtrNextCell(*new_list);
+            index ++;
         }
-        free(UniteDetruite->pdata);
-        free(UniteDetruite);
-}*/
+        *player = suppEnN(*player,index);
+    }
+}
 
-/*
+//A test
 void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
-    TListePlayer cible = quiEstAPortee(jeu, UniteAttaquante);
     if(UniteAttaquante->peutAttaquer == 1){
-    cible->pdata->pointsDeVie = cible->pdata->pointsDeVie - UniteAttaquante->degats;
+    UniteCible->pointsDeVie = UniteCible->pointsDeVie - UniteAttaquante->degats;
     UniteAttaquante->peutAttaquer = 0;
     }
 }
-*/
+
 
 /*
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
