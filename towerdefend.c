@@ -268,6 +268,7 @@ void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu
     }
 }
 
+//This function makes a combat between 2 units.
 //A test
 void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
     if(UniteAttaquante->peutAttaquer == 1){
@@ -277,6 +278,7 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
 }
 
 // AJOUTER LES COORDONNEES
+//This function creates an unit randomly for each players.
 // A test
 Tunite createUnit(TListePlayer playerRoi, TListePlayer player){
     int randNbR = rand()%100;
@@ -295,6 +297,7 @@ Tunite createUnit(TListePlayer playerRoi, TListePlayer player){
 }
 
 //A test
+//This function adds an unit choosed by createUnit() in the list of the player concerned
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
     if(getPtrData(*player)->nom == tourAir || getPtrData(*player)->nom == tourSol || getPtrData(*player)->nom == tourRoi){
         *player = ajoutEnN(*player,1,*nouvelleUnite);
@@ -306,6 +309,7 @@ void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
 
 
 // TODO: This is untested.
+//This function returns the unit at range for an attacking unit
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
     TListePlayer l;
     initListe(&l);
