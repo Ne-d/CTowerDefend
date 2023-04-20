@@ -255,7 +255,7 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 }
 
 //Delete the unit when his health go to 0, if it's the last unit it's become NULL
-//Pas Test
+//A Test
 void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu){
     TListePlayer* new_list = player;
     int index = 0;
@@ -277,11 +277,16 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
 }
 
 
-/*
+//A test
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
-    player->pdata = nouvelleUnite;
+    if(getPtrData(*player)->nom == tourAir || getPtrData(*player)->nom == tourSol || getPtrData(*player)->nom == tourRoi){
+        *player = ajoutEnN(*player,1,*nouvelleUnite);
+    }
+    else{
+        *player = ajoutEnTete(*player,*nouvelleUnite);
+    }
 }
-*/
+
 
 // TODO: This is untested.
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
