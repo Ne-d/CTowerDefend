@@ -8,17 +8,22 @@
 
 //typedef Tunite* ** TplateauJeu;
 
-TplateauJeu AlloueTab2D(int largeur, int hauteur){
+TplateauJeu AlloueTab2D(int largeur, int hauteur)
+{
     TplateauJeu jeu;
     jeu = (Tunite***)malloc(sizeof(Tunite**)*largeur);
-    for (int i=0;i<largeur;i++){
+    for (int i=0; i<largeur; i++)
+    {
         jeu[i] = (Tunite**)malloc(sizeof(Tunite*)*hauteur);
     }
     return jeu;  //tab2D contenant des pointeurs
 }
-void initPlateauAvecNULL(TplateauJeu jeu,int largeur, int hauteur){
-    for (int i=0;i<largeur;i++){
-        for (int j=0;j<hauteur;j++){
+void initPlateauAvecNULL(TplateauJeu jeu,int largeur, int hauteur)
+{
+    for (int i=0; i<largeur; i++)
+    {
+        for (int j=0; j<hauteur; j++)
+        {
             jeu[i][j] = NULL;
         }
     }
@@ -45,10 +50,13 @@ int *xdepart, int *ydepart : valeur en x y de départ pouri la premiere case
 int distance  : distance sur laquelle on va écrire des coordonnées dans le tab chemin
 int *distanceMaxRestante : securité pour ne pas sortir de la plage d'indice de chemin
 */
-void ecritCheminVersleHaut(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante){
-    if ((*distanceMaxRestante - distance)>=0){
+void ecritCheminVersleHaut(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante)
+{
+    if ((*distanceMaxRestante - distance)>=0)
+    {
         int y;
-        for (y=*ydepart;y>*ydepart-distance;y--){
+        for (y=*ydepart; y>*ydepart-distance; y--)
+        {
             chemin[*ichemin][X]= *xdepart;
             chemin[*ichemin][Y]= y;
             (*ichemin)++;
@@ -57,10 +65,13 @@ void ecritCheminVersleHaut(int **chemin, int *ichemin, int *xdepart, int *ydepar
     }
     else printf("erreur longueur chemin\n");
 }
-void ecritCheminVerslaDroite(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante){
-    if ((*distanceMaxRestante - distance)>=0){
+void ecritCheminVerslaDroite(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante)
+{
+    if ((*distanceMaxRestante - distance)>=0)
+    {
         int x;
-        for (x=*xdepart;x<*xdepart+distance;x++){
+        for (x=*xdepart; x<*xdepart+distance; x++)
+        {
             chemin[*ichemin][X]= x;
             chemin[*ichemin][Y]= *ydepart;
             (*ichemin)++;
@@ -69,10 +80,13 @@ void ecritCheminVerslaDroite(int **chemin, int *ichemin, int *xdepart, int *ydep
     }
     else printf("erreur longueur chemin\n");
 }
-void ecritCheminVerslaGauche(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante){
-    if ((*distanceMaxRestante - distance)>=0){
+void ecritCheminVerslaGauche(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante)
+{
+    if ((*distanceMaxRestante - distance)>=0)
+    {
         int x;
-        for (x=*xdepart;x>*xdepart-distance;x--){
+        for (x=*xdepart; x>*xdepart-distance; x--)
+        {
             chemin[*ichemin][X]= x;
             chemin[*ichemin][Y]= *ydepart;
             (*ichemin)++;
@@ -82,10 +96,12 @@ void ecritCheminVerslaGauche(int **chemin, int *ichemin, int *xdepart, int *ydep
     else printf("erreur longueur chemin\n");
 }
 
-int **initChemin(){
+int **initChemin()
+{
     int **chemin = (int**)malloc(sizeof(int*)*NBCOORDPARCOURS);
 
-    for (int j=0;j<NBCOORDPARCOURS;j++){
+    for (int j=0; j<NBCOORDPARCOURS; j++)
+    {
         chemin[j] = (int*)malloc(sizeof(int)*2);  //2 cases :indice 0 pour la coord en X, indice 1 pour la coord en Y
     }
 
@@ -107,25 +123,31 @@ int **initChemin(){
     return chemin;  //tab2D contenant des pointeurs
 }
 
-void afficheCoordonneesParcours(int **chemin, int nbcoord){
+void afficheCoordonneesParcours(int **chemin, int nbcoord)
+{
     printf("Liste coordonnees: ");
-    for (int i=0; i<nbcoord; i++){
+    for (int i=0; i<nbcoord; i++)
+    {
         printf("(%d, %d)",chemin[i][X], chemin[i][Y]);
     }
     printf("\nfin liste coordonnées\n");
 }
 
 
-void affichePlateauConsole(TplateauJeu jeu, int largeur, int hauteur){
+void affichePlateauConsole(TplateauJeu jeu, int largeur, int hauteur)
+{
     //pour un affichage sur la console, en relation avec enum TuniteDuJeu
-    const char* InitialeUnite[7]={"s", "a", "r", "A", "C", "D", "G"};
+    const char* InitialeUnite[7]= {"s", "a", "r", "A", "C", "D", "G"};
 
     printf("\n");
-    for (int j=0;j<hauteur;j++){
-        for (int i=0;i<largeur;i++){
-                // A ne pas donner aux etudiants
-            if (jeu[i][j] != NULL){
-                    printf("%s",InitialeUnite[jeu[i][j]->nom]);
+    for (int j=0; j<hauteur; j++)
+    {
+        for (int i=0; i<largeur; i++)
+        {
+            // A ne pas donner aux etudiants
+            if (jeu[i][j] != NULL)
+            {
+                printf("%s",InitialeUnite[jeu[i][j]->nom]);
             }
             else printf(" ");  //cad pas d'unité sur cette case
         }
@@ -134,7 +156,8 @@ void affichePlateauConsole(TplateauJeu jeu, int largeur, int hauteur){
 }
 
 // Les fonctions suivantes créent les unités avec leurs stats en leur allouant un espace mémoire
-Tunite *creeTourSol(int posx, int posy){
+Tunite *creeTourSol(int posx, int posy)
+{
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = tourSol;
     nouv->cibleAttaquable = sol;
@@ -151,7 +174,8 @@ Tunite *creeTourSol(int posx, int posy){
     return nouv;
 }
 
-Tunite *creeTourAir(int posx, int posy){
+Tunite *creeTourAir(int posx, int posy)
+{
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = tourAir;
     nouv->cibleAttaquable = air;
@@ -168,7 +192,8 @@ Tunite *creeTourAir(int posx, int posy){
     return nouv;
 }
 
-Tunite *creeTourRoi(int posx, int posy){
+Tunite *creeTourRoi(int posx, int posy)
+{
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = tourRoi;
     nouv->cibleAttaquable = solEtAir;
@@ -185,7 +210,8 @@ Tunite *creeTourRoi(int posx, int posy){
     return nouv;
 }
 
-Tunite *creeDragon(int posx, int posy){
+Tunite *creeDragon(int posx, int posy)
+{
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = dragon;
     nouv->cibleAttaquable = solEtAir;
@@ -202,7 +228,8 @@ Tunite *creeDragon(int posx, int posy){
     return nouv;
 }
 
-Tunite *creeArcher(int posx, int posy){
+Tunite *creeArcher(int posx, int posy)
+{
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = archer;
     nouv->cibleAttaquable = solEtAir;
@@ -219,7 +246,8 @@ Tunite *creeArcher(int posx, int posy){
     return nouv;
 }
 
-Tunite *creeGargouille(int posx, int posy){
+Tunite *creeGargouille(int posx, int posy)
+{
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = gargouille;
     nouv->cibleAttaquable = solEtAir;
@@ -236,7 +264,8 @@ Tunite *creeGargouille(int posx, int posy){
     return nouv;
 }
 
-Tunite *creeChevalier(int posx, int posy){
+Tunite *creeChevalier(int posx, int posy)
+{
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = chevalier;
     nouv->cibleAttaquable = sol;
@@ -254,22 +283,26 @@ Tunite *creeChevalier(int posx, int posy){
 }
 
 //Retourne True si le Roi est tué
-bool tourRoiDetruite(TListePlayer playerRoi){
+bool tourRoiDetruite(TListePlayer playerRoi)
+{
     return playerRoi->pdata->pointsDeVie <= 0;
 }
 
 //Supprime l'unité quand sa vie est à 0, Si c'est la dernière unité, la liste du joueur est NULL
 //A Test
-void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu){
+void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu)
+{
     TListePlayer new_list = player;
     int x = UniteDetruite->posX;
     int y = UniteDetruite->posY;
     int index = 0;
 
     //On vérifie si l'unité n'a plus de PV
-    if(UniteDetruite->pointsDeVie <=0){
+    if(UniteDetruite->pointsDeVie <=0)
+    {
         // Trouve l'index de l'unité à détruire dans la liste en comparant les coordonnées
-        while(x != getPtrData(new_list)->posX && y != getPtrData(new_list)->posY && getPtrNextCell(new_list) != NULL){
+        while(x != getPtrData(new_list)->posX && y != getPtrData(new_list)->posY && getPtrNextCell(new_list) != NULL)
+        {
             new_list = getPtrNextCell(new_list);
             index ++;
         }
@@ -280,27 +313,33 @@ void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu)
 
 //Cette fonction fait combattre 2 unités entre elles
 //A test
-void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
+void combat(SDL_Surface *surface, Tunite * UniteAttaquante, Tunite * UniteCible)
+{
     //On vérifie si l'unité n'a pas déjà attaqué dans le tour
-    if(UniteAttaquante->peutAttaquer == 1){
-    UniteCible->pointsDeVie = UniteCible->pointsDeVie - UniteAttaquante->degats;
-    UniteAttaquante->peutAttaquer = 0;
-    dessineAttaque(surface,UniteAttaquante,UniteCible);
+    if(UniteAttaquante->peutAttaquer == 1)
+    {
+        UniteCible->pointsDeVie = UniteCible->pointsDeVie - UniteAttaquante->degats;
+        UniteAttaquante->peutAttaquer = 0;
+        dessineAttaque(surface,UniteAttaquante,UniteCible);
     }
 }
 
 // This function creates an unit randomly for each players.
 // A test
-void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, TplateauJeu plateau){
+TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int **chemin, TplateauJeu plateau)
+{
     // Generate a random number between 0 and 100 for each team.
     int randNbR = rand() % 100;
     int randNbH = rand() % 100;
 
     // Chooses if a new tower will spawn
-    if(randNbR > 50){
+    if(randNbR > 101)  // TODO: This will never be true, for debug purposes. Change that for release.
+    {
+        printf("createUnit: a new tower will spawn.\n");
         // Find a set of coordinates to spawn the new tower on
         bool validPositionFound = false;
-        while(!validPositionFound) {
+        while(!validPositionFound)
+        {
             // Trouve une case du chemin aléatoire et ses coordonnées.
             int pathIndex = rand() % NBCOORDPARCOURS;
             int cheminX = chemin[pathIndex][X];
@@ -313,87 +352,115 @@ void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, 
             int newX = cheminX + 1;
             int newY = cheminY;
             if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
-                   {
-                       validPositionFound = true;
-                       finalX = newX;
-                       finalY = newY;
-                   }
+                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+            {
+                validPositionFound = true;
+                finalX = newX;
+                finalY = newY;
+            }
 
             // Teste si la case à gauche de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
             newX = cheminX - 1;
             newY = cheminY;
             if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
-                   {
-                       validPositionFound = true;
-                       finalX = newX;
-                       finalY = newY;
-                   }
+                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+            {
+                validPositionFound = true;
+                finalX = newX;
+                finalY = newY;
+            }
 
             // Teste si la case au dessus de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
             newX = cheminX;
             newY = cheminY - 1;
             if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
-                   {
-                       validPositionFound = true;
-                       finalX = newX;
-                       finalY = newY;
-                   }
+                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+            {
+                validPositionFound = true;
+                finalX = newX;
+                finalY = newY;
+            }
 
             // Teste si la case en dessous de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
             newX = cheminX;
             newY = cheminY + 1;
             if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
             {
-                       validPositionFound = true;
-                       finalX = newX;
-                       finalY = newY;
+                validPositionFound = true;
+                finalX = newX;
+                finalY = newY;
             }
 
-        if((rand()%100) > 50) {
-            AjouterUnite(playerRoi, creeTourAir(finalX, finalY));
-        }
-        else {
-            AjouterUnite(playerRoi, creeTourSol(finalX, finalY));
-        }
+            if(validPositionFound)
+            {
+                printf("createUnit: valid position found to spawn a new tower.\n");
+            }
+
+            if((rand()%100) > 50)
+            {
+                *playerRoi = AjouterUnite(*playerRoi, creeTourAir(finalX, finalY));
+                printf("createUnit: spawning a new air tower.\n");
+            }
+            else
+            {
+                *playerRoi = AjouterUnite(*playerRoi, creeTourSol(finalX, finalY));
+                printf("createUnit: spawning a new ground tower.\n");
+            }
 
         }
 
     }
 
-    // Chooses if a new unit of the horde will spawn
-    if(randNbH > 50){
+    int spawnX = chemin[0][X];
+    int spawnY = chemin[0][Y];
+    // Choisis si une nouvelle unité de la horde va apparaitre, en fonction d'une probabilité et en vérifiant que la case est libre.
+    if(randNbH < 10 && plateau[spawnX][spawnY] == NULL)
+    {
+        printf("createUnit: a new unit of the horde will spawn.\n");
         int valueUnit = rand() % 100;
-        if(valueUnit < 25) {
-                AjouterUnite(playerHorde, creeGargouille(chemin[0][X], chemin[0][Y]));
+        if(valueUnit < 25)
+        {
+            *playerHorde = AjouterUnite(*playerHorde, creeGargouille(spawnX, spawnY));
         }
-        else if(valueUnit > 25 && valueUnit < 50) {
-                AjouterUnite(playerHorde, creeArcher(chemin[0][X], chemin[0][Y]));
+        else if(valueUnit > 25 && valueUnit < 50)
+        {
+            *playerHorde = AjouterUnite(*playerHorde, creeArcher(spawnX, spawnY));
         }
-        else if(valueUnit > 50 && valueUnit < 75) {
-                AjouterUnite(playerHorde, creeChevalier(chemin[0][X], chemin[0][Y]));
+        else if(valueUnit > 50 && valueUnit < 75)
+        {
+            *playerHorde = AjouterUnite(*playerHorde, creeChevalier(spawnX, spawnY));
         }
-        else {
-                AjouterUnite(playerHorde, creeDragon(chemin[0][X], chemin[0][Y]));
+        else
+        {
+            *playerHorde = AjouterUnite(*playerHorde, creeDragon(spawnX, spawnY));
         }
+
+        plateau[spawnX][spawnY] = getPtrData(*playerHorde);
+        printf("createUnit: spawning a new unit of the horde.\n");
     }
+
+    //plateau = PositionnePlayerOnPlateau(playerHorde, plateau);
+    //plateau = PositionnePlayerOnPlateau(playerRoi, plateau);
+
+    return plateau;
 }
 
 //A test
 //Cette fonction ajoute une unité choisit par createUnit() dans la liste des joueurs concernés
-TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite) {
+TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite)
+{
     //On vérifie si l'unité est à ajouter au début de la liste (le roi et les membres de la horde) ou en deuxième position (les tours)
-    if(nouvelleUnite->nom == tourAir || nouvelleUnite->nom == tourSol){
+    if(nouvelleUnite->nom == tourAir || nouvelleUnite->nom == tourSol)
+    {
         player = ajoutEnN(player, 1, *nouvelleUnite);
     }
-    else{
+    else
+    {
         player = ajoutEnTete(player, *nouvelleUnite);
     }
 
@@ -401,33 +468,72 @@ TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite) {
 }
 
 //Cette fonction permet aux unités de la Horde de se déplacer sur le chemin du jeu
-void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau){
-    //On parcourt toutes les units du joueur
-    while(getPtrNextCell(player) != NULL){
-        Tunite* actualUnit = getPtrData(player);
-        int indiceCasesUnit = 0;
-        //On parcourt les cases du chemin pour en trouver l'indice de la case de l'unité
-        while(actualUnit->posX != chemin[indiceCasesUnit][X] || actualUnit->posY != chemin[indiceCasesUnit][Y]){
-            indiceCasesUnit ++;
-        }
-        int casesMax = 1;
-        //On vérifie de combien on peut avancer l'unité suivant sa capacité de déplacement et si les cases sont occupées ou non
-        for(int i=1; i<= actualUnit->vitessedeplacement ; i++){
-            int coordx = chemin[indiceCasesUnit+i][X] ;
-            int coordy = chemin[indiceCasesUnit+i][Y] ;
-            if(plateau[coordx][coordy] == NULL){
-                casesMax++;
+// TODO: A tester
+void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
+{
+    if(!listeVide(player))
+    {
+        //On parcourt toutes les unités du joueur
+        TListePlayer newlist = player;
+        do
+        {
+            Tunite* currentUnit = getPtrData(newlist);
+            int originX = currentUnit->posX;
+            int originY = currentUnit->posY;
+
+            //On parcourt les cases du chemin pour en trouver l'indice de la case de l'unité
+            int indiceCaseUnit = 0;
+            while(currentUnit->posX != chemin[indiceCaseUnit][X] || currentUnit->posY != chemin[indiceCaseUnit][Y])
+            {
+                indiceCaseUnit ++;
+            }
+
+            printf("Indice case unit: %d\n", indiceCaseUnit);
+
+            //On vérifie de combien on peut avancer l'unité suivant sa capacité de déplacement, si les cases sont occupées ou non et si la fin du chemin est atteinte
+            int casesMax = 0;
+            for(int i=0; i < currentUnit->vitessedeplacement; i++)
+            {
+                // On ne peut pas avancer si on a atteint la dernière case du chemin
+                if(indiceCaseUnit + casesMax + 1 < NBCOORDPARCOURS)
+                {
+                    int coordx = chemin[indiceCaseUnit+i][X];
+                    int coordy = chemin[indiceCaseUnit+i][Y];
+
+                    // On ne peut avancer que si la case choisie est vide, sauf si la case est occupée par nous même
+                    if( plateau[coordx][coordy] == NULL || (coordx == originX && coordy == originY) )
+                    {
+                        casesMax++;
+                    }
+                }
+            }
+
+            //On effectue le déplacement en changeant posX et posY dans l'unité
+            int newX = chemin[indiceCaseUnit+casesMax][X];
+            int newY = chemin[indiceCaseUnit+casesMax][Y];
+
+            currentUnit->posX = newX;
+            currentUnit->posY = newY;
+            printf("CasesMax = %d\n", casesMax);
+
+            // On effectue le déplacement de manière graphique en supprimant l'unité de son ancienne case et en la rajoutant aux nouvelles coordonnées.
+            plateau[originX][originY] = NULL;
+            plateau[newX][newY] = currentUnit;
+
+
+            if(getPtrNextCell(newlist) != NULL)
+            {
+                newlist = getPtrNextCell(newlist);
             }
         }
-        //On effectue le déplacement
-        actualUnit->posX = chemin[indiceCasesUnit+casesMax][X];
-        actualUnit->posY = chemin[indiceCasesUnit+casesMax][Y];
+        while(getPtrNextCell(newlist) != NULL);
     }
 }
 
 // TODO: This is untested.
 //Retourne une liste des unités à portée pour l'unité attaquante
-TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
+TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
+{
     TListePlayer l;
     initListe(&l);
 
@@ -446,7 +552,7 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
 
                 // Checking if the attacker is in the king's team and the target is in the horde.
                 if( (UniteAttaquante->nom == tourRoi || UniteAttaquante->nom == tourSol || UniteAttaquante->nom == tourAir) &&
-                    (cible->nom == archer || cible->nom == chevalier || cible->nom == dragon || cible->nom == gargouille) )
+                        (cible->nom == archer || cible->nom == chevalier || cible->nom == dragon || cible->nom == gargouille) )
                 {
                     cibleIsEnemy = true;
                 }
@@ -454,8 +560,8 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
                 // Alternatively, checking if the attacker is in the horde and the target is the king's tower
                 // (they don't attack the other towers)
                 if( (UniteAttaquante->nom == archer || UniteAttaquante->nom == chevalier ||
-                    UniteAttaquante->nom == dragon || UniteAttaquante->nom == gargouille) &&
-                    (cible->nom == tourRoi || cible->nom == tourSol || cible->nom == tourAir) )
+                        UniteAttaquante->nom == dragon || UniteAttaquante->nom == gargouille) &&
+                        cible->nom == tourRoi )
                 {
                     cibleIsEnemy = true;
                 }
@@ -482,15 +588,17 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
 }
 
 // A tester
-// TODO: Passer un pointeur serait plus potimisé pour éviter de copier tout le tableau
-TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu) {
+// TODO: Passer un pointeur serait plus optimisé pour éviter de copier tout le tableau
+TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
+{
     TListePlayer newlist = player;
     int x = getPtrData(newlist)->posX;
     int y = getPtrData(newlist)->posY;
 
     jeu[x][y] = getPtrData(newlist);
 
-    while(getPtrNextCell(newlist) != NULL) {
+    while(getPtrNextCell(newlist) != NULL)
+    {
         x = getPtrData(newlist)->posX;
         y = getPtrData(newlist)->posY;
 

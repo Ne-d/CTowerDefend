@@ -18,13 +18,13 @@ int main(int argc, char* argv[])
     SDL_Init(SDL_INIT_VIDEO);
 
     pWindow = SDL_CreateWindow(
-        "Appuyez sur ECHAP pour quitter, S/C ET D/V les gerer les sauvegardes",
-        SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED,
-        LARGEURJEU*40,
-        HAUTEURJEU*40,
-        SDL_WINDOW_SHOWN
-    );
+                  "Appuyez sur ECHAP pour quitter, S/C ET D/V les gerer les sauvegardes",
+                  SDL_WINDOWPOS_UNDEFINED,
+                  SDL_WINDOWPOS_UNDEFINED,
+                  LARGEURJEU*40,
+                  HAUTEURJEU*40,
+                  SDL_WINDOW_SHOWN
+              );
 
     //SDL_Renderer * renderer = SDL_CreateRenderer(pWindow, -1, 0);  //non utilisé, pour mémoire
 
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 
     // ASTUCE : on stocke le sprite d'une unité à l'indice de son nom dans le type enum TuniteDuJeu, dans le tableau TabSprite
     // SAUF pour l'Eau, l''herbe et le pont qui apparaitront en l absence d'unité (NULL dans le plateau) et en foction de certains indices x,y définissant le chemin central
-    SDL_Surface* TabSprite[11]={pSpriteTourSol,pSpriteTourAir,pSpriteTourRoi,pSpriteArcher,pSpriteChevalier,pSpriteDragon,pSpriteGargouille,pSpriteEau,pSpriteHerbe,pSpritePont,pSpriteTerre};
+    SDL_Surface* TabSprite[11]= {pSpriteTourSol,pSpriteTourAir,pSpriteTourRoi,pSpriteArcher,pSpriteChevalier,pSpriteDragon,pSpriteGargouille,pSpriteEau,pSpriteHerbe,pSpritePont,pSpriteTerre};
 
     int** tabParcours=initChemin();  //tabParcours est un tableau de NBCOORDPARCOURS cases, chacune contenant un tableau à 2 cases (indice 0 pour X, indice 1 pour Y)
 
@@ -61,18 +61,22 @@ int main(int argc, char* argv[])
         /*                                                                    */
         /*              DEFINISSEZ/INITIALISER ICI VOS VARIABLES              */
 
-           TListePlayer playerRoi;
-           TListePlayer playerHorde;
+        printf("Begin initialization.\n");
 
-           initListe(&playerRoi);
-           initListe(&playerHorde);
+        TListePlayer playerRoi;
+        TListePlayer playerHorde;
 
-            // Initialise le générateur de nombres pseudo-aléatoires
-            srand(time(NULL));
+        initListe(&playerRoi);
+        initListe(&playerHorde);
 
-            // Ajoute le roi à la liste de son équipe et au plateau de jeu
-           playerRoi = AjouterUnite(playerRoi, creeTourRoi(4, 1));
-           jeu = PositionnePlayerOnPlateau(playerRoi, jeu);
+        // Initialise le générateur de nombres pseudo-aléatoires
+        srand(time(NULL));
+
+        // Ajoute le roi à la liste de son équipe et au plateau de jeu
+        playerRoi = AjouterUnite(playerRoi, creeTourRoi(4, 1));
+        jeu = PositionnePlayerOnPlateau(playerRoi, jeu);
+
+        printf("End initialization.\n\n");
 
 
         /* FIN de vos variables                                               */
@@ -81,86 +85,104 @@ int main(int argc, char* argv[])
 
         // boucle principale du jeu
         int cont = 1;
-        while ( /*!tourRoiDetruite(playerRoi) ||*/ cont == 1 ) { // La boucle se termine quand le roi meurt
-                SDL_PumpEvents(); //do events
+        while ( /*!tourRoiDetruite(playerRoi) ||*/ cont == 1 )   // La boucle se termine quand le roi meurt
+        {
+            SDL_PumpEvents(); //do events
+            efface_fenetre(pWinSurf);
+            prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
+
+            /***********************************************************************/
+            /*                                                                     */
+            /*                                                                     */
+            //APPELEZ ICI VOS FONCTIONS QUI FONT EVOLUER LE JEU
+
+            printf("New turn starts.\n");
+
+            printf("Starting createUnit().\n");
+            jeu = createUnit(&playerRoi, &playerHorde, tabParcours, jeu);
+            printf("Finished createUnit().\n");
+
+            printf("Starting deplacement().\n");
+            deplacement(playerHorde, tabParcours, jeu);
+            printf("Finished deplacement().\n");
+
+            // dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque
+
+
+            // utiliser dessineAttaque dans votre fonction de combat va vous obliger à ajouter un argument lié à la SDL
+            // -> SDL_Surface *surface
+            // regarder le prototype de dessineAttaque dans maSDL.c pour (mieux) comprendre
+
+            /*                                                                     */
+            /*                                                                     */
+            // FIN DE VOS APPELS
+            /***********************************************************************/
+            //affichage du jeu à chaque tour
+
+            maj_fenetre(pWindow);
+            SDL_Delay(150);  //valeur du délai à modifier éventuellement
+
+
+            //LECTURE DE CERTAINES TOUCHES POUR LANCER LES RESTAURATIONS ET SAUVEGARDES
+            const Uint8* pKeyStates = SDL_GetKeyboardState(NULL);
+            if ( pKeyStates[SDL_SCANCODE_V] )
+            {
+                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
+
+                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
+                message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
+
+                //Ne pas modifiez les 4 lignes ci-dessous
                 efface_fenetre(pWinSurf);
                 prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
-
-                /***********************************************************************/
-                /*                                                                     */
-                /*                                                                     */
-                //APPELEZ ICI VOS FONCTIONS QUI FONT EVOLUER LE JEU
-
-                // dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque
-
-
-                // utiliser dessineAttaque dans votre fonction de combat va vous obliger à ajouter un argument lié à la SDL
-                // -> SDL_Surface *surface
-                // regarder le prototype de dessineAttaque dans maSDL.c pour (mieux) comprendre
-
-                /*                                                                     */
-                /*                                                                     */
-                // FIN DE VOS APPELS
-                /***********************************************************************/
-                //affichage du jeu à chaque tour
-
                 maj_fenetre(pWindow);
-                SDL_Delay(150);  //valeur du délai à modifier éventuellement
+                SDL_Delay(300);
+            }
+            if ( pKeyStates[SDL_SCANCODE_C] )
+            {
+                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur C */
 
+                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
+                message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
 
-                //LECTURE DE CERTAINES TOUCHES POUR LANCER LES RESTAURATIONS ET SAUVEGARDES
-                const Uint8* pKeyStates = SDL_GetKeyboardState(NULL);
-                if ( pKeyStates[SDL_SCANCODE_V] ){
-                        /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
+                //Ne pas modifiez les 4 lignes ci-dessous
+                efface_fenetre(pWinSurf);
+                prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
+                maj_fenetre(pWindow);
+                SDL_Delay(300);
+            }
+            if ( pKeyStates[SDL_SCANCODE_D] )
+            {
+                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
 
-                        // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
-                        message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
+                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
+                message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
 
-                        //Ne pas modifiez les 4 lignes ci-dessous
-                        efface_fenetre(pWinSurf);
-                        prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
-                        maj_fenetre(pWindow);
-                        SDL_Delay(300);
-                }
-                if ( pKeyStates[SDL_SCANCODE_C] ){
-                        /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur C */
+                //Ne pas modifiez les 4 lignes ci-dessous
+                efface_fenetre(pWinSurf);
+                prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
+                maj_fenetre(pWindow);
+                SDL_Delay(300);
+            }
+            if ( pKeyStates[SDL_SCANCODE_S] )
+            {
+                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appyue sur S */
 
-                        // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
-                        message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
+                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
+                message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
 
-                        //Ne pas modifiez les 4 lignes ci-dessous
-                        efface_fenetre(pWinSurf);
-                        prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
-                        maj_fenetre(pWindow);
-                        SDL_Delay(300);
-                }
-                if ( pKeyStates[SDL_SCANCODE_D] ){
-                        /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
+                //Ne pas modifiez les 4 lignes ci-dessous
+                efface_fenetre(pWinSurf);
+                prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
+                maj_fenetre(pWindow);
+                SDL_Delay(300);
+            }
+            if ( pKeyStates[SDL_SCANCODE_ESCAPE] )
+            {
+                cont = 0;  //sortie de la boucle
+            }
 
-                        // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
-                        message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
-
-                        //Ne pas modifiez les 4 lignes ci-dessous
-                        efface_fenetre(pWinSurf);
-                        prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
-                        maj_fenetre(pWindow);
-                        SDL_Delay(300);
-                }
-                if ( pKeyStates[SDL_SCANCODE_S] ){
-                        /* Ajouter vos appels de fonctions ci-dessous qd le joueur appyue sur S */
-
-                        // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
-                        message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
-
-                        //Ne pas modifiez les 4 lignes ci-dessous
-                        efface_fenetre(pWinSurf);
-                        prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
-                        maj_fenetre(pWindow);
-                        SDL_Delay(300);
-                }
-                if ( pKeyStates[SDL_SCANCODE_ESCAPE] ){
-                        cont = 0;  //sortie de la boucle
-                }
+            printf("End of the turn.\n\n");
 
         }
         //fin boucle du jeu

@@ -27,8 +27,8 @@ TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu);
 
 
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) ; //retourne la liste des cibles possibles
-void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible) ;
-void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, TplateauJeu plateau);
+void combat(SDL_Surface *surface, Tunite * UniteAttaquante, Tunite * UniteCible) ;
+TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int **chemin, TplateauJeu plateau);
 
 
 Tunite *creeArcher(int posx, int posy);
