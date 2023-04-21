@@ -130,6 +130,7 @@ void affichePlateauConsole(TplateauJeu jeu, int largeur, int hauteur){
     }
 }
 
+// Les fonctions suivantes créent les unités avec leurs stats en leur allouant un espace mémoire
 Tunite *creeTourSol(int posx, int posy){
     Tunite *nouv = (Tunite*)malloc(sizeof(Tunite));
     nouv->nom = tourSol;
@@ -249,16 +250,17 @@ Tunite *creeChevalier(int posx, int posy){
     return nouv;
 }
 
-//Return true if the king tower is killed
+//Retourne True si le Roi est tué
 bool tourRoiDetruite(TListePlayer playerRoi){
     return playerRoi->pdata->pointsDeVie <= 0;
 }
 
-//Delete the unit when his health go to 0, if it's the last unit it's become NULL
+//Supprime l'unité quand sa vie est à 0, Si c'est la dernière unité, la liste du joueur est NULL
 //A Test
 void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu){
     TListePlayer* new_list = player;
     int index = 0;
+    //On vérifie si l'unité n'a plus de PV
     if(UniteDetruite->pointsDeVie <=0){
         while(UniteDetruite->posX != getPtrData(*new_list)->posX && UniteDetruite->posY != getPtrData(*new_list)->posY && getPtrNextCell(*new_list) != NULL){
             *new_list = getPtrNextCell(*new_list);
@@ -268,9 +270,10 @@ void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu
     }
 }
 
-//This function makes a combat between 2 units.
+//Cette fonction fait combattre 2 unités entre elles
 //A test
 void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible){
+    //On vérifie si l'unité n'a pas déjà attaqué dans le tour
     if(UniteAttaquante->peutAttaquer == 1){
     UniteCible->pointsDeVie = UniteCible->pointsDeVie - UniteAttaquante->degats;
     UniteAttaquante->peutAttaquer = 0;
@@ -279,7 +282,7 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
 }
 
 // AJOUTER LES COORDONNEES
-//This function creates an unit randomly for each players.
+//Cette fonction crée une unité aléatoire pour chaque joueur
 // A test
 Tunite createUnit(TListePlayer playerRoi, TListePlayer player){
     int randNbR = rand()%100;
@@ -298,8 +301,9 @@ Tunite createUnit(TListePlayer playerRoi, TListePlayer player){
 }
 
 //A test
-//This function adds an unit choosed by createUnit() in the list of the player concerned
+//Cette fonction ajoute une unité choisit par createUnit() dans la liste des joueurs concernés
 void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
+    //On vérifie si l'unité est à ajouter chez le Roi ou le joueur
     if(getPtrData(*player)->nom == tourAir || getPtrData(*player)->nom == tourSol || getPtrData(*player)->nom == tourRoi){
         *player = ajoutEnN(*player,1,*nouvelleUnite);
     }
@@ -334,7 +338,7 @@ void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau){
 }
 
 // TODO: This is untested.
-//This function returns the unit at range for an attacking unit
+//Retourne une liste des unités à portée pour l'unité attaquante
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
     TListePlayer l;
     initListe(&l);
