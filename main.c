@@ -83,6 +83,9 @@ int main(int argc, char* argv[])
                 /*                                                                     */
                 //APPELEZ ICI VOS FONCTIONS QUI FONT EVOLUER LE JEU
 
+                // Initialise le générateur de nombres pseudo-aléatoires
+                srand(time(NULL));
+
                 /* dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque
 
                 //exemple d'appel de dessineAttaque (factice car les unités n'appartiennent pas ici à aucune liste d'unité (ni à la horde ni au Roi)

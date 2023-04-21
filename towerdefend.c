@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "SDL.h"
+#include "maSDL.h"
 #include "towerdefend.h"
 #include "listeSimple.h"
 
@@ -24,11 +25,13 @@ void initPlateauAvecNULL(TplateauJeu jeu,int largeur, int hauteur){
 
     //POUR LA DEMO D'AFFICHAGE UNIQUEMENT, A SUPPRIMER
     //(les tours ici ne sont pas liées aux listes des unités de vos joueurs)
+    /*
     jeu[5][3]=creeTourSol(5,3);
     jeu[3][3]=creeTourAir(3,3);
     jeu[4][1]=creeTourRoi(4,1);
     jeu[4][15]=creeTourAir(4,15);
     jeu[5][17]=creeDragon(5,17);
+    */
     //FIN DEMO AFFICHAGE
 }
 
@@ -257,16 +260,16 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 
 //Supprime l'unité quand sa vie est à 0, Si c'est la dernière unité, la liste du joueur est NULL
 //A Test
-void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu){
-    TListePlayer* new_list = player;
+void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu){
+    TListePlayer new_list = player;
     int index = 0;
     //On vérifie si l'unité n'a plus de PV
     if(UniteDetruite->pointsDeVie <=0){
-        while(UniteDetruite->posX != getPtrData(*new_list)->posX && UniteDetruite->posY != getPtrData(*new_list)->posY && getPtrNextCell(*new_list) != NULL){
-            *new_list = getPtrNextCell(*new_list);
+        while(UniteDetruite->posX != getPtrData(new_list)->posX && UniteDetruite->posY != getPtrData(new_list)->posY && getPtrNextCell(new_list) != NULL){
+            new_list = getPtrNextCell(new_list);
             index ++;
         }
-        *player = suppEnN(*player,index);
+        player = suppEnN(player,index);
     }
 }
 
@@ -285,7 +288,6 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
 // A test
 void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, TplateauJeu plateau){
     // Generate a random number between 0 and 100 for each team.
-    srand(time(NULL));
     int randNbR = rand() % 100;
     int randNbH = rand() % 100;
 
@@ -351,10 +353,10 @@ void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, 
             }
 
         if((rand()%100) > 50) {
-            AjouterUnite(*playerRoi, creeTourAir(finalX, finalY));
+            AjouterUnite(playerRoi, creeTourAir(finalX, finalY));
         }
         else {
-            AjouterUnite(*playerRoi, creeTourSol(finalX, finalY));
+            AjouterUnite(playerRoi, creeTourSol(finalX, finalY));
         }
 
         }
@@ -365,29 +367,29 @@ void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, 
     if(randNbH > 50){
         int valueUnit = rand() % 100;
         if(valueUnit < 25) {
-                AjouterUnite(*playerHorde, creeGargouille(chemin[0][X], chemin[0][Y]));
+                AjouterUnite(playerHorde, creeGargouille(chemin[0][X], chemin[0][Y]));
         }
         else if(valueUnit > 25 && valueUnit < 50) {
-                AjouterUnite(*playerHorde, creeArcher(chemin[0][X], chemin[0][Y]));
+                AjouterUnite(playerHorde, creeArcher(chemin[0][X], chemin[0][Y]));
         }
         else if(valueUnit > 50 && valueUnit < 75) {
-                AjouterUnite(*playerHorde, creeChevalier(chemin[0][X], chemin[0][Y]));
+                AjouterUnite(playerHorde, creeChevalier(chemin[0][X], chemin[0][Y]));
         }
         else {
-                AjouterUnite(*playerHorde, creeDragon(chemin[0][X], chemin[0][Y]));
+                AjouterUnite(playerHorde, creeDragon(chemin[0][X], chemin[0][Y]));
         }
     }
 }
 
 //A test
 //Cette fonction ajoute une unité choisit par createUnit() dans la liste des joueurs concernés
-void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
+void AjouterUnite(TListePlayer player, Tunite *nouvelleUnite){
     //On vérifie si l'unité est à ajouter chez le Roi ou le joueur
-    if(getPtrData(*player)->nom == tourAir || getPtrData(*player)->nom == tourSol || getPtrData(*player)->nom == tourRoi){
-        *player = ajoutEnN(*player,1,*nouvelleUnite);
+    if(getPtrData(player)->nom == tourAir || getPtrData(player)->nom == tourSol || getPtrData(player)->nom == tourRoi){
+        player = ajoutEnN(player,1,*nouvelleUnite);
     }
     else{
-        *player = ajoutEnTete(*player,*nouvelleUnite);
+        player = ajoutEnTete(player,*nouvelleUnite);
     }
 }
 
