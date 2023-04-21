@@ -27,7 +27,8 @@ bool tourRoiDetruite(TListePlayer player);
 
 
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) ; //retourne la liste des cibles possibles
-//void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible) ;
+void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible) ;
+void createUnit(TListePlayer playerRoi, TListePlayer player);
 
 
 Tunite *creeArcher(int posx, int posy);
@@ -35,10 +36,12 @@ Tunite *creeGargouille(int posx, int posy);
 Tunite *creeDragon(int posx, int posy);
 Tunite *creeChevalier(int posx, int posy);
 
-/*
-void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite);
-void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite);
+TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante);
 
-*/
+void supprimerUnite(TListePlayer *player, Tunite *UniteDetruite, TplateauJeu jeu);
+void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite);
+void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau);
+
+
 
 #endif // TOWERDEFEND_H_INCLUDED

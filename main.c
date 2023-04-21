@@ -73,7 +73,6 @@ int main(int argc, char* argv[])
 
         // boucle principale du jeu
         int cont = 1;
-        int unique = 1;  //a supprimer c'est utiliser pour la démo de dessineAttaque
         while ( cont != 0 ){   //VOUS DEVEZ GERER (DETECTER) LA FIN DU JEU -> tourRoiDetruite
                 SDL_PumpEvents(); //do events
                 efface_fenetre(pWinSurf);

@@ -284,7 +284,7 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
 // AJOUTER LES COORDONNEES
 //Cette fonction crée une unité aléatoire pour chaque joueur
 // A test
-Tunite createUnit(TListePlayer playerRoi, TListePlayer player){
+void createUnit(TListePlayer playerRoi, TListePlayer player){
     int randNbR = rand()%100;
     int randNbH = rand()%100;
     if(randNbR > 50){
