@@ -61,11 +61,11 @@ int main(int argc, char* argv[])
         /*                                                                    */
         /*              DEFINISSEZ/INITIALISER ICI VOS VARIABLES              */
 
-           TListePlayer roi;
-           TListePlayer horde;
+           TListePlayer playerRoi;
+           TListePlayer playerHorde;
 
-           initListe(&roi);
-           initListe(&horde);
+           initListe(&playerRoi);
+           initListe(&playerHorde);
 
         /* FIN de vos variables                                               */
         /**********************************************************************/

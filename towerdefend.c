@@ -281,22 +281,101 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
     }
 }
 
-// AJOUTER LES COORDONNEES
-//Cette fonction crée une unité aléatoire pour chaque joueur
+// This function creates an unit randomly for each players.
 // A test
-void createUnit(TListePlayer playerRoi, TListePlayer player){
-    int randNbR = rand()%100;
-    int randNbH = rand()%100;
+void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, TplateauJeu plateau){
+    // Generate a random number between 0 and 100 for each team.
+    srand(time(NULL));
+    int randNbR = rand() % 100;
+    int randNbH = rand() % 100;
+
+    // Chooses if a new tower will spawn
     if(randNbR > 50){
-        if((rand()%100) > 50) AjouterUnite(playerRoi, creeTourAir());
-        else AjouterUnite(playerRoi, creeTourSol());
+        // Find a set of coordinates to spawn the new tower on
+        bool validPositionFound = false;
+        while(!validPositionFound) {
+            // Trouve une case du chemin aléatoire et ses coordonnées.
+            int pathIndex = rand() % NBCOORDPARCOURS;
+            int cheminX = chemin[pathIndex][X];
+            int cheminY = chemin[pathIndex][Y];
+
+            int finalX = -1;
+            int finalY = -1;
+
+            // Teste si la case à droite de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
+            int newX = cheminX + 1;
+            int newY = cheminY;
+            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
+                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+                   {
+                       validPositionFound = true;
+                       finalX = newX;
+                       finalY = newY;
+                   }
+
+            // Teste si la case à gauche de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
+            newX = cheminX - 1;
+            newY = cheminY;
+            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
+                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+                   {
+                       validPositionFound = true;
+                       finalX = newX;
+                       finalY = newY;
+                   }
+
+            // Teste si la case au dessus de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
+            newX = cheminX;
+            newY = cheminY - 1;
+            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
+                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+                   {
+                       validPositionFound = true;
+                       finalX = newX;
+                       finalY = newY;
+                   }
+
+            // Teste si la case en dessous de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
+            newX = cheminX;
+            newY = cheminY + 1;
+            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
+                   (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
+                   (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+            {
+                       validPositionFound = true;
+                       finalX = newX;
+                       finalY = newY;
+            }
+
+        if((rand()%100) > 50) {
+            AjouterUnite(*playerRoi, creeTourAir(finalX, finalY));
+        }
+        else {
+            AjouterUnite(*playerRoi, creeTourSol(finalX, finalY));
+        }
+
+        }
+
     }
+
+    // Chooses if a new unit of the horde will spawn
     if(randNbH > 50){
-        int valueUnit = rand()%100;
-        if(valueUnit < 25) AjouterUnite(player, creeGargouille());
-        else if(valueUnit > 25 && valueUnit < 50) AjouterUnite(player, creeArcher());
-             else if(valueUnit > 50 && valueUnit < 75) AjouterUnite(player, creeChevalier());
-                  else AjouterUnite(player, creeDragon());
+        int valueUnit = rand() % 100;
+        if(valueUnit < 25) {
+                AjouterUnite(*playerHorde, creeGargouille(chemin[0][X], chemin[0][Y]));
+        }
+        else if(valueUnit > 25 && valueUnit < 50) {
+                AjouterUnite(*playerHorde, creeArcher(chemin[0][X], chemin[0][Y]));
+        }
+        else if(valueUnit > 50 && valueUnit < 75) {
+                AjouterUnite(*playerHorde, creeChevalier(chemin[0][X], chemin[0][Y]));
+        }
+        else {
+                AjouterUnite(*playerHorde, creeDragon(chemin[0][X], chemin[0][Y]));
+        }
     }
 }
 
