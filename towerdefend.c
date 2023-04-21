@@ -274,6 +274,7 @@ void combat(SDL_Surface *surface , Tunite * UniteAttaquante, Tunite * UniteCible
     if(UniteAttaquante->peutAttaquer == 1){
     UniteCible->pointsDeVie = UniteCible->pointsDeVie - UniteAttaquante->degats;
     UniteAttaquante->peutAttaquer = 0;
+    dessineAttaque(surface,UniteAttaquante,UniteCible);
     }
 }
 
@@ -307,7 +308,7 @@ void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
     }
 }
 
-//Cette focntion permet aux unités de la Horde de se déplacer sur le chemin du jeu
+//Cette fonction permet aux unités de la Horde de se déplacer sur le chemin du jeu
 void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau){
     //On parcourt toutes les units du joueur
     while(getPtrNextCell(player) != NULL){
