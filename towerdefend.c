@@ -307,6 +307,30 @@ void AjouterUnite(TListePlayer *player, Tunite *nouvelleUnite){
     }
 }
 
+//Cette focntion permet aux unités de la Horde de se déplacer sur le chemin du jeu
+void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau){
+    //On parcourt toutes les units du joueur
+    while(getPtrNextCell(player) != NULL){
+        Tunite* actualUnit = getPtrData(player);
+        int indiceCasesUnit = 0;
+        //On parcourt les cases du chemin pour en trouver l'indice de la case de l'unité
+        while(actualUnit->posX != chemin[indiceCasesUnit][X] || actualUnit->posY != chemin[indiceCasesUnit][Y]){
+            indiceCasesUnit ++;
+        }
+        int casesMax = 1;
+        //On vérifie de combien on peut avancer l'unité suivant sa capacité de déplacement et si les cases sont occupées ou non
+        for(int i=1; i<= actualUnit->vitessedeplacement ; i++){
+            int coordx = chemin[indiceCasesUnit+i][X] ;
+            int coordy = chemin[indiceCasesUnit+i][Y] ;
+            if(plateau[coordx][coordy] == NULL){
+                casesMax++;
+            }
+        }
+        //On effectue le déplacement
+        actualUnit->posX = chemin[indiceCasesUnit+casesMax][X];
+        actualUnit->posY = chemin[indiceCasesUnit+casesMax][Y];
+    }
+}
 
 // TODO: This is untested.
 //This function returns the unit at range for an attacking unit
