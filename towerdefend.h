@@ -23,7 +23,7 @@ Tunite *creeTourRoi(int posx, int posy);
 
 
 bool tourRoiDetruite(TListePlayer player);
-//void PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
+TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu);
 
 
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) ; //retourne la liste des cibles possibles
@@ -37,7 +37,7 @@ Tunite *creeDragon(int posx, int posy);
 Tunite *creeChevalier(int posx, int posy);
 
 void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu);
-void AjouterUnite(TListePlayer player, Tunite *nouvelleUnite);
+TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite);
 void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau);
 
 

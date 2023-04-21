@@ -67,13 +67,21 @@ int main(int argc, char* argv[])
            initListe(&playerRoi);
            initListe(&playerHorde);
 
+            // Initialise le générateur de nombres pseudo-aléatoires
+            srand(time(NULL));
+
+            // Ajoute le roi à la liste de son équipe et au plateau de jeu
+           playerRoi = AjouterUnite(playerRoi, creeTourRoi(4, 1));
+           jeu = PositionnePlayerOnPlateau(playerRoi, jeu);
+
+
         /* FIN de vos variables                                               */
         /**********************************************************************/
 
 
         // boucle principale du jeu
         int cont = 1;
-        while ( cont != 0 ){   //VOUS DEVEZ GERER (DETECTER) LA FIN DU JEU -> tourRoiDetruite
+        while ( /*!tourRoiDetruite(playerRoi) ||*/ cont == 1 ) { // La boucle se termine quand le roi meurt
                 SDL_PumpEvents(); //do events
                 efface_fenetre(pWinSurf);
                 prepareAllSpriteDuJeu(jeu,tabParcours,LARGEURJEU,HAUTEURJEU,TabSprite,pWinSurf);
@@ -83,24 +91,8 @@ int main(int argc, char* argv[])
                 /*                                                                     */
                 //APPELEZ ICI VOS FONCTIONS QUI FONT EVOLUER LE JEU
 
-                // Initialise le générateur de nombres pseudo-aléatoires
-                srand(time(NULL));
+                // dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque
 
-                /* dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque
-
-                //exemple d'appel de dessineAttaque (factice car les unités n'appartiennent pas ici à aucune liste d'unité (ni à la horde ni au Roi)
-                // c'est juste pour la démo, a supprimer donc
-                */
-
-                /*
-                if (unique % 10 == 0) {
-                         printf("dessine Attaque %d\n", unique);
-                         dessineAttaque(pWinSurf, creeTourAir(4,15),creeDragon(5,17));
-                         dessineAttaque(pWinSurf, creeDragon(5,17),creeTourRoi(4,1));
-                         unique++;
-                } else printf("dessine Attaque %d\n", unique);
-                unique++;
-                */
 
                 // utiliser dessineAttaque dans votre fonction de combat va vous obliger à ajouter un argument lié à la SDL
                 // -> SDL_Surface *surface

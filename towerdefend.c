@@ -262,13 +262,18 @@ bool tourRoiDetruite(TListePlayer playerRoi){
 //A Test
 void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu){
     TListePlayer new_list = player;
+    int x = UniteDetruite->posX;
+    int y = UniteDetruite->posY;
     int index = 0;
+
     //On vérifie si l'unité n'a plus de PV
     if(UniteDetruite->pointsDeVie <=0){
-        while(UniteDetruite->posX != getPtrData(new_list)->posX && UniteDetruite->posY != getPtrData(new_list)->posY && getPtrNextCell(new_list) != NULL){
+        // Trouve l'index de l'unité à détruire dans la liste en comparant les coordonnées
+        while(x != getPtrData(new_list)->posX && y != getPtrData(new_list)->posY && getPtrNextCell(new_list) != NULL){
             new_list = getPtrNextCell(new_list);
             index ++;
         }
+        jeu[x][y] = NULL;
         player = suppEnN(player,index);
     }
 }
@@ -383,14 +388,16 @@ void createUnit(TListePlayer playerRoi, TListePlayer playerHorde, int **chemin, 
 
 //A test
 //Cette fonction ajoute une unité choisit par createUnit() dans la liste des joueurs concernés
-void AjouterUnite(TListePlayer player, Tunite *nouvelleUnite){
-    //On vérifie si l'unité est à ajouter chez le Roi ou le joueur
-    if(getPtrData(player)->nom == tourAir || getPtrData(player)->nom == tourSol || getPtrData(player)->nom == tourRoi){
-        player = ajoutEnN(player,1,*nouvelleUnite);
+TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite) {
+    //On vérifie si l'unité est à ajouter au début de la liste (le roi et les membres de la horde) ou en deuxième position (les tours)
+    if(nouvelleUnite->nom == tourAir || nouvelleUnite->nom == tourSol){
+        player = ajoutEnN(player, 1, *nouvelleUnite);
     }
     else{
-        player = ajoutEnTete(player,*nouvelleUnite);
+        player = ajoutEnTete(player, *nouvelleUnite);
     }
+
+    return player;
 }
 
 //Cette fonction permet aux unités de la Horde de se déplacer sur le chemin du jeu
@@ -472,4 +479,24 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) {
 
     return l;
 
+}
+
+// A tester
+// TODO: Passer un pointeur serait plus potimisé pour éviter de copier tout le tableau
+TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu) {
+    TListePlayer newlist = player;
+    int x = getPtrData(newlist)->posX;
+    int y = getPtrData(newlist)->posY;
+
+    jeu[x][y] = getPtrData(newlist);
+
+    while(getPtrNextCell(newlist) != NULL) {
+        x = getPtrData(newlist)->posX;
+        y = getPtrData(newlist)->posY;
+
+        jeu[x][y] = getPtrData(newlist);
+        newlist = getPtrNextCell(newlist);
+    }
+
+    return jeu;
 }

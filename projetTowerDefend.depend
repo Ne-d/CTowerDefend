@@ -1589,11 +1589,11 @@
 1682087866 d:\users\ned\fac\c\ctowerdefend\masdl.h
 	"towerdefend.h"
 
-1682094082 d:\users\ned\fac\c\ctowerdefend\towerdefend.h
+1682101803 d:\users\ned\fac\c\ctowerdefend\towerdefend.h
 	"stdbool.h"
 	"towerDefendTypes.h"
 
-1682094349 source:d:\users\ned\fac\c\ctowerdefend\main.c
+1682101893 source:d:\users\ned\fac\c\ctowerdefend\main.c
 	"SDL.h"
 	"maSDL.h"
 	"towerdefend.h"
@@ -1612,20 +1612,21 @@
 
 1682087866 d:\users\ned\fac\c\ctowerdefend\towerdefendtypes.h
 
-1681994389 source:d:\users\ned\fac\c\ctowerdefend\towerdefend.c
+1682101906 source:d:\users\ned\fac\c\ctowerdefend\towerdefend.c
 	<stdio.h>
 	<stdlib.h>
 	"SDL.h"
+	"maSDL.h"
 	"towerdefend.h"
 	"listeSimple.h"
 
-1682087866 source:d:\users\ned\fac\c\ctowerdefend\listesimple.c
+1682096904 source:d:\users\ned\fac\c\ctowerdefend\listesimple.c
 	<stdlib.h>
 	<stdio.h>
 	"listeSimple.h"
 	"towerDefendTypes.h"
 
-1682087866 d:\users\ned\fac\c\ctowerdefend\listesimple.h
+1682095669 d:\users\ned\fac\c\ctowerdefend\listesimple.h
 	<stdbool.h>
 	"towerDefendTypes.h"
 

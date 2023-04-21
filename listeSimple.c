@@ -143,11 +143,7 @@ T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
 {
     if(listeVide(l)) // If l is empty
     {
-        // Set the value of the first cell
-        // Same as ajoutEnTete without boilerplate
-        l->suiv = NULL;
-        l->pdata = malloc(sizeof(Tunite));
-        *(l->pdata) = mydata;
+        ajoutEnTete(l, mydata);
     }
     else if(pos == 0)
     {
