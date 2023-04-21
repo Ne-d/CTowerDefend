@@ -483,7 +483,7 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 
             //On parcourt les cases du chemin pour en trouver l'indice de la case de l'unité
             int indiceCaseUnit = 0;
-            while(currentUnit->posX != chemin[indiceCaseUnit][X] || currentUnit->posY != chemin[indiceCaseUnit][Y])
+            while(originX != chemin[indiceCaseUnit][X] || originY != chemin[indiceCaseUnit][Y])
             {
                 indiceCaseUnit ++;
             }
@@ -492,18 +492,24 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 
             //On vérifie de combien on peut avancer l'unité suivant sa capacité de déplacement, si les cases sont occupées ou non et si la fin du chemin est atteinte
             int casesMax = 0;
-            for(int i=0; i < currentUnit->vitessedeplacement; i++)
+            bool autreUniteAtteinte = false;
+            for(int i=0; i < currentUnit->vitessedeplacement && !autreUniteAtteinte; i++)
             {
-                // On ne peut pas avancer si on a atteint la dernière case du chemin
+                // On ne peut avancer que si on n'a pas atteint la dernière case du chemin
                 if(indiceCaseUnit + casesMax + 1 < NBCOORDPARCOURS)
                 {
                     int coordx = chemin[indiceCaseUnit+i][X];
                     int coordy = chemin[indiceCaseUnit+i][Y];
 
                     // On ne peut avancer que si la case choisie est vide, sauf si la case est occupée par nous même
+                    printf("Origin: %d, %d. Coords: %d, %d\n", originX, originY, coordx, coordy);
                     if( plateau[coordx][coordy] == NULL || (coordx == originX && coordy == originY) )
                     {
                         casesMax++;
+                    }
+                    else
+                    {
+                        autreUniteAtteinte = true;
                     }
                 }
             }

@@ -76,6 +76,11 @@ int main(int argc, char* argv[])
         playerRoi = AjouterUnite(playerRoi, creeTourRoi(4, 1));
         jeu = PositionnePlayerOnPlateau(playerRoi, jeu);
 
+        // For debug purposes only
+        jeu[4][9] = creeArcher(4, 9);
+        playerHorde = AjouterUnite(playerHorde, creeArcher(5, 18));
+        jeu = PositionnePlayerOnPlateau(playerHorde, jeu);
+
         printf("End initialization.\n\n");
 
 
@@ -98,9 +103,11 @@ int main(int argc, char* argv[])
 
             printf("New turn starts.\n");
 
+            /*
             printf("Starting createUnit().\n");
             jeu = createUnit(&playerRoi, &playerHorde, tabParcours, jeu);
             printf("Finished createUnit().\n");
+            */
 
             printf("Starting deplacement().\n");
             deplacement(playerHorde, tabParcours, jeu);
