@@ -328,101 +328,55 @@ void combat(SDL_Surface *surface, Tunite * UniteAttaquante, Tunite * UniteCible)
 // A test
 TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int **chemin, TplateauJeu plateau)
 {
-    // Generate a random number between 0 and 100 for each team.
-    int randNbR = rand() % 100;
-    int randNbH = rand() % 100;
-
     // Chooses if a new tower will spawn
-    if(randNbR > 101)  // TODO: This will never be true, for debug purposes. Change that for release.
+    if((rand() % 100) < 2)
     {
-        printf("createUnit: a new tower will spawn.\n");
-        // Find a set of coordinates to spawn the new tower on
-        bool validPositionFound = false;
-        while(!validPositionFound)
+        int positions[NBPOSITIONSTOWERS][2] = { {6, 5}, {5, 9}, {3, 3}, {5, 3}, {8, 13}, {5, 12} };
+        int tourX = -1;
+        int tourY = -1;
+
+        bool positionFound = false;
+        for(int i = 0; i < NBPOSITIONSTOWERS && !positionFound; i++)
         {
-            // Trouve une case du chemin aléatoire et ses coordonnées.
-            int pathIndex = rand() % NBCOORDPARCOURS;
-            int cheminX = chemin[pathIndex][X];
-            int cheminY = chemin[pathIndex][Y];
-
-            int finalX = -1;
-            int finalY = -1;
-
-            // Teste si la case à droite de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
-            int newX = cheminX + 1;
-            int newY = cheminY;
-            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
+            if(plateau[positions[i][X]][positions[i][Y]] == NULL)
             {
-                validPositionFound = true;
-                finalX = newX;
-                finalY = newY;
+                positionFound = true;
+                tourX = positions[i][X];
+                tourY = positions[i][Y];
             }
+        }
 
-            // Teste si la case à gauche de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
-            newX = cheminX - 1;
-            newY = cheminY;
-            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
-            {
-                validPositionFound = true;
-                finalX = newX;
-                finalY = newY;
-            }
-
-            // Teste si la case au dessus de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
-            newX = cheminX;
-            newY = cheminY - 1;
-            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
-            {
-                validPositionFound = true;
-                finalX = newX;
-                finalY = newY;
-            }
-
-            // Teste si la case en dessous de la case du chemin choisie est disponible (pas du chemin, et pas occupée)
-            newX = cheminX;
-            newY = cheminY + 1;
-            if( !( (newX == chemin[pathIndex + 1][X] && newY == chemin[pathIndex + 1][Y]) || // Vérifie si les coordonnées choisies sont
-                    (newX == chemin[pathIndex - 1][X] && newY == chemin[pathIndex - 1][Y]) ) && // Celles de la case d'avant ou d'après du chemin
-                    (plateau[newX][newY] == NULL)) // Et que la case n'es pas déjà occupée
-            {
-                validPositionFound = true;
-                finalX = newX;
-                finalY = newY;
-            }
-
-            if(validPositionFound)
-            {
-                printf("createUnit: valid position found to spawn a new tower.\n");
-            }
-
+        if(positionFound)
+        {
+            Tunite* newTower = NULL;
             if((rand()%100) > 50)
             {
-                *playerRoi = AjouterUnite(*playerRoi, creeTourAir(finalX, finalY));
+                newTower = creeTourAir(tourX, tourY);
+                *playerRoi = AjouterUnite(*playerRoi, newTower);
                 printf("createUnit: spawning a new air tower.\n");
             }
             else
             {
-                *playerRoi = AjouterUnite(*playerRoi, creeTourSol(finalX, finalY));
+                newTower = creeTourSol(tourX, tourY);
+                *playerRoi = AjouterUnite(*playerRoi, newTower);
                 printf("createUnit: spawning a new ground tower.\n");
             }
 
+            plateau[tourX][tourY] = newTower;
         }
-
+        else
+        {
+            printf("CreateUnit: failed to create new tower, no valid position found");
+        }
     }
 
     int spawnX = chemin[0][X];
     int spawnY = chemin[0][Y];
+
     // Choisis si une nouvelle unité de la horde va apparaitre, en fonction d'une probabilité et en vérifiant que la case est libre.
-    if(randNbH < 10 && plateau[spawnX][spawnY] == NULL)
+    if((rand() % 100) < 5 && plateau[spawnX][spawnY] == NULL)
     {
         Tunite* newUnit = NULL;
-        printf("createUnit: a new unit of the horde will spawn.\n");
         int valueUnit = rand() % 100;
         if(valueUnit < 25)
         {
@@ -476,7 +430,7 @@ TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite)
 }
 
 //Cette fonction permet aux unités de la Horde de se déplacer sur le chemin du jeu
-// TODO: A tester
+// TODO: Cleanup
 void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 {
 
@@ -606,32 +560,44 @@ TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
     return jeu;
 }
 
-void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi){
-    do{
+void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi)
+{
+    do
+    {
         getPtrData(playerHorde)->peutAttaquer = 1;
         if(getPtrNextCell(playerHorde) != NULL) playerHorde = getPtrNextCell(playerHorde);
-    }while(getPtrNextCell(playerHorde) != NULL);
+    }
+    while(getPtrNextCell(playerHorde) != NULL);
 
-    do{
+    do
+    {
         getPtrData(playerRoi)->peutAttaquer = 1;
         if(getPtrNextCell(playerRoi) != NULL) playerRoi = getPtrNextCell(playerRoi);
-    }while(getPtrNextCell(playerRoi) != NULL);
+    }
+    while(getPtrNextCell(playerRoi) != NULL);
 }
 
-void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface){
-    do{
+void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface)
+{
+    do
+    {
         TListePlayer targetList = quiEstAPortee(jeu,getPtrData(player));
         Tunite *lowUnit = NULL;
-        if(!listeVide(targetList)){
-            do{
-                if(getPtrData(targetList)->pointsDeVie < lowUnit->pointsDeVie){
-                        lowUnit = getPtrData(targetList);
+        if(!listeVide(targetList))
+        {
+            do
+            {
+                if(getPtrData(targetList)->pointsDeVie < lowUnit->pointsDeVie)
+                {
+                    lowUnit = getPtrData(targetList);
                 }
                 if(getPtrNextCell(targetList) != NULL) targetList = getPtrNextCell(targetList);
-            }while(getPtrNextCell(targetList) != NULL);
+            }
+            while(getPtrNextCell(targetList) != NULL);
             combat(surface,getPtrData(player),lowUnit);
             supprimerUnite(player,lowUnit,jeu);
         }
         if(getPtrNextCell(player) != NULL) player = getPtrNextCell(player);
-    }while(getPtrNextCell(player) != NULL);
+    }
+    while(getPtrNextCell(player) != NULL);
 }
