@@ -291,7 +291,6 @@ bool tourRoiDetruite(TListePlayer playerRoi)
 }
 
 // Supprime toutes les unités de la liste player qui sont morts.
-// A Test
 TListePlayer supprimerUnite(TListePlayer player, TplateauJeu jeu)
 {
     TListePlayer newlist;
@@ -315,7 +314,6 @@ TListePlayer supprimerUnite(TListePlayer player, TplateauJeu jeu)
 }
 
 //Cette fonction fait combattre 2 unités entre elles
-//A test
 void combat(SDL_Surface *surface, Tunite *UniteAttaquante, Tunite *UniteCible)
 {
     //On vérifie si l'unité n'a pas déjà attaqué dans le tour
@@ -335,12 +333,11 @@ void combat(SDL_Surface *surface, Tunite *UniteAttaquante, Tunite *UniteCible)
     }
 }
 
-// This function creates a unit randomly for each player.
-// TODO: Cleanup
+// Cette fonction crée une unité random pour chaque joueur.
 TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int **chemin, TplateauJeu plateau)
 {
-    // Chooses if a new tower will spawn
-    if((rand() % 100) < 5) // TODO: Change this value, this will never spawn towers
+    // Choisie si une nouvelle tour spawn
+    if((rand() % 100) < 5)
     {
         int positions[NBPOSITIONSTOWERS][2] = { {6, 5}, {5, 9}, {3, 3}, {5, 3}, {8, 13}, {5, 12} };
         int tourX = -1;
@@ -419,7 +416,6 @@ TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int *
     return plateau;
 }
 
-//A test
 // Cette fonction ajoute une unité choisit par createUnit() dans la liste de l'équipe choisie.
 // C'est à l'utilisateur de la fonction de passer la bonne liste en paramètre player (playerRoi ou playerHorde).
 TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite)
@@ -440,7 +436,6 @@ TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite)
 }
 
 //Cette fonction permet aux unités de la Horde de se déplacer sur le chemin du jeu
-// TODO: Cleanup
 void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 {
 
@@ -487,15 +482,13 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
     }
 }
 
-// TODO: This is untested.
 //Retourne une liste des unités à portée pour l'unité attaquante
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
 {
     TListePlayer l;
     initListe(&l);
 
-    // Loop through all coordinates of the TplateauJeu
-    // TODO: This could be made more efficient by only looking at a square around the attacking unit.
+    // Parcours toutes les coordonnées de TplateauJeu
     for(int i = 0; i < LARGEURJEU; i++) // X coordinate
     {
         for(int j = 0; j < HAUTEURJEU; j++) // Y coordinate
@@ -504,27 +497,27 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
 
             if(cible != NULL)
             {
-                // Checking if the target is in a position we can attack (ground or air, not coordinates)
+                // Vérifie si la cible est a une position attaquable (sol ou air, et pas les coordonnées)
                 if(UniteAttaquante->cibleAttaquable == cible->maposition || UniteAttaquante->cibleAttaquable == solEtAir)
                 {
                     bool cibleIsEnemy = false;
 
-                    // Checking if the attacker is in the king's team and the target is in the horde.
+                    // Vérifie si l'attaquant est dans l'équipe du Roi et que la cible vient de la Horde.
                     if( (UniteAttaquante->nom == tourRoi || UniteAttaquante->nom == tourSol || UniteAttaquante->nom == tourAir) &&
                             (cible->nom == archer || cible->nom == chevalier || cible->nom == dragon || cible->nom == gargouille) )
                     {
                         cibleIsEnemy = true;
                     }
 
-                    // Alternatively, checking if the attacker is in the horde and the target is the king's tower
-                    // (they don't attack the other towers)
+                    // Alternativement, Vérifie si l'attaquant est dans la Horde et que la cible vient de l'équipe du Roi.
+                    // (Les tours ne sont pas attaquées)
                     if( (UniteAttaquante->nom == archer || UniteAttaquante->nom == chevalier ||
                             UniteAttaquante->nom == dragon || UniteAttaquante->nom == gargouille) &&
                             cible->nom == tourRoi )
                     {
                         cibleIsEnemy = true;
                     }
-                    // This feels overly complicated, but I haven't found anything better.
+                    // Cela est très compliqué, mais je n'ai pas trouvé mieux.
 
                     if(cibleIsEnemy)
                     {
@@ -532,7 +525,7 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
                         int deltaY = UniteAttaquante->posY - cible->posY;
                         int distanceSquared = abs(deltaX * deltaX + deltaY * deltaY);
 
-                        // Checking if the target is in range but is not the attacker itself
+                        // Vérifie si la cible est a portée mais n'est pas l'attaquant lui meme
                         if(distanceSquared <= (UniteAttaquante->portee * UniteAttaquante->portee) && distanceSquared != 0 && cible->pointsDeVie > 0)
                         {
                             l = ajoutEnTeteParPtr(l, cible);
@@ -546,8 +539,7 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
     return l;
 }
 
-// A tester
-// TODO: Passer un pointeur serait plus optimisé pour éviter de copier tout le tableau
+// Positionne les joueurs au début de partie (set les spawn)
 TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
 {
     TListePlayer newlist = player;
@@ -569,7 +561,6 @@ TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
 }
 
 // Réinitialise à 1 la valeur de peutAttaquer sur toutes les unités des deux joueurs.
-// A tester
 void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi)
 {
     while(playerHorde != NULL)
@@ -759,6 +750,7 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs p
     printf("Fin du chargement\n");
 }
 
+//Sauvegarde en binaire
 void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
 {
     printf("Savebin: Started saving game to binary file.\n");
