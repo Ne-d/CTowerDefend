@@ -605,12 +605,12 @@ void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface)
 }
 
 void saveseq(TListePlayer roi, TListePlayer horde){
-    FILE* file = fopen("partieseq.cls", "w"); // Ouvrir le fichier "partieseq.cls" en écriture "w"
+    FILE* file = fopen("partieseq.cls", "w"); // Ouvre le fichier "partieseq.cls" en écriture "w"
     if (file == NULL)
         return;
 
     TListePlayer temp;
-    fprintf(file, "roi\n"); // fprintf ça écrit dans le fichier, ça s'utilise comme printf
+    fprintf(file, "roi\n"); // écrit dans le fichier, ça s'utilise comme un printf
     for (temp = roi; !listeVide(temp); temp = getPtrNextCell(temp))
     {
         Tunite* unite = getPtrData(temp);
@@ -635,11 +635,11 @@ void saveseq(TListePlayer roi, TListePlayer horde){
     }
     fprintf(file, "fin_horde\n");
 
-    fclose(file); // Oublie pas de fermer le fichier sinon tu vas te faire taper
+    fclose(file); // On ferme le fichier
     printf("Le jeu a bien ete sauvegarde via le systeme sequentiel\n");
 }
 
-void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs pour pouvoir les modifier dans la fonction
+void loadseq(TListePlayer* roi, TListePlayer* horde) // Utilisation de pointeurs pour pouvoir les manipuler dans la fonction
 {
     FILE* file = fopen("partieseq.cls", "r");
     if (file == NULL)
@@ -647,13 +647,13 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs p
 
     //Roi
     char roiStr[100];
-    fscanf(file, "%s", roiStr); // fscanf ça lit dans le fichier jusqu'au prochain espace ou \n, ça s'utilise comme scanf
+    fscanf(file, "%s", roiStr); // Lit dans le fichier jusqu'au prochain espace ou \n, ça s'utilise comme scanf
     if (strcmp(roiStr, "roi") != 0)
         return;
 
-    *roi = deleteList(*roi); // Supprime la liste pour partir sur un truc neuf
+    *roi = deleteList(*roi); // Supprime la liste afin d'avoir une nouvelle base
 
-    int iters = 0; // Pour être sûr de pas faire de boucle infinie
+    int iters = 0; // Pour éviter les boucles infinies
     while (iters < 1024)
     {
         iters++;
@@ -676,7 +676,7 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs p
         {
         case tourRoi:
             unite = creeTourRoi(x, y);
-            unite->pointsDeVie = pointsDeVie; //Uniquement le roi perd des PV
+            unite->pointsDeVie = pointsDeVie; //Uniquement le roi perd des PV dans les règles
             break;
         case tourAir:
             unite = creeTourAir(x, y);
