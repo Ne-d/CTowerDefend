@@ -623,3 +623,32 @@ TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
 
     return jeu;
 }
+
+void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi){
+    do{
+        getPtrData(playerHorde)->peutAttaquer = 1;
+        if(getPtrNextCell(playerHorde) != NULL) playerHorde = getPtrNextCell(playerHorde);
+    }while(getPtrNextCell(playerHorde) != NULL);
+
+    do{
+        getPtrData(playerRoi)->peutAttaquer = 1;
+        if(getPtrNextCell(playerRoi) != NULL) playerRoi = getPtrNextCell(playerRoi);
+    }while(getPtrNextCell(playerRoi) != NULL);
+}
+
+void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface){
+    do{
+        TListePlayer targetList = quiEstAPortee(jeu,getPtrData(player));
+        Tunite *lowUnit = NULL;
+        if(!listeVide(targetList)){
+            do{
+                if(getPtrData(targetList)->pointsDeVie < lowUnit->pointsDeVie){
+                        lowUnit = getPtrData(targetList);
+                }
+                if(getPtrNextCell(targetList) != NULL) targetList = getPtrNextCell(targetList);
+            }while(getPtrNextCell(targetList) != NULL);
+            combat(surface,getPtrData(player),lowUnit);
+        }
+        if(getPtrNextCell(player) != NULL) player = getPtrNextCell(player);
+    }while(getPtrNextCell(player) != NULL);
+}

@@ -39,7 +39,8 @@ Tunite *creeChevalier(int posx, int posy);
 void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu);
 TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite);
 void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau);
-
+void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi);
+void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface);
 
 
 #endif // TOWERDEFEND_H_INCLUDED
