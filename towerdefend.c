@@ -611,7 +611,7 @@ void saveseq(TListePlayer roi, TListePlayer horde){
 
     TListePlayer temp;
     fprintf(file, "roi\n"); // écrit dans le fichier, ça s'utilise comme un printf
-    for (temp = roi; !listeVide(temp); temp = getPtrNextCell(temp))
+    for (temp = roi; !listeVide(temp); temp = getPtrNextCell(temp))// g changé
     {
         Tunite* unite = getPtrData(temp);
         fprintf(file, "%d ", unite->nom);
@@ -624,7 +624,7 @@ void saveseq(TListePlayer roi, TListePlayer horde){
 
     // Horde
     fprintf(file, "horde\n");
-    for (temp = horde; !listeVide(temp); temp = getPtrNextCell(temp))
+    for (temp = horde; !listeVide(temp); temp = getPtrNextCell(temp)) // g changé
     {
         Tunite* unite = getPtrData(temp);
         fprintf(file, "%d ", unite->nom);
@@ -651,7 +651,7 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // Utilisation de pointeurs
     if (strcmp(roiStr, "roi") != 0)
         return;
 
-    *roi = deleteList(*roi); // Supprime la liste afin d'avoir une nouvelle base
+    *roi = deleteList(*roi); // Supprime la liste afin d'avoir une nouvelle base // g changé
 
     int iters = 0; // Pour éviter les boucles infinies
     while (iters < 1024)
@@ -697,7 +697,7 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // Utilisation de pointeurs
     if (strcmp(hordeStr, "horde") != 0)
         return;
 
-    *horde = deleteList(*horde);
+    *horde = deleteList(*horde); // g changé
 
     iters = 0;
     while (iters < 1024)
