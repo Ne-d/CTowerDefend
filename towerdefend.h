@@ -47,5 +47,8 @@ TListePlayer duringCombat(TListePlayer playerAttack, TListePlayer playerEnemy, T
 void saveseq(TListePlayer roi, TListePlayer horde);
 void loadseq(TListePlayer* roi, TListePlayer* horde);
 
+void savebin(TListePlayer playerRoi, TListePlayer playerHorde);
+void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde);
+
 
 #endif // TOWERDEFEND_H_INCLUDED

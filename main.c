@@ -16,6 +16,12 @@
 /*--------- Main ---------------------*/
 int main(int argc, char* argv[])
 {
+    /* Tests liste simple
+    testListeSimple();
+
+    return 0;
+    */
+
     SDL_Window *pWindow;
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -171,7 +177,7 @@ int main(int argc, char* argv[])
             if ( pKeyStates[SDL_SCANCODE_S] )
             {
                 /* Ajouter vos appels de fonctions ci-dessous qd le joueur appyue sur S */
-                loadseq(&playerRoi,&playerHorde);
+                savebin(playerRoi, playerHorde);
                 // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
 
                 //Ne pas modifiez les 4 lignes ci-dessous

@@ -758,3 +758,30 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs p
     fclose(file);
     printf("Fin du chargement\n");
 }
+
+void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
+{
+    printf("Savebin: Started saving game to binary file.\n");
+    int lenghRoi;
+    int lengthHorde;
+
+    Tunite* arrRoi;
+    Tunite* arrHorde;
+
+    arrRoi = listToArray(playerRoi, &lenghRoi);
+    arrHorde = listToArray(playerHorde, &lengthHorde);
+
+    long sizeRoi = getSizeBytes(playerRoi);
+    long sizeHorde = getSizeBytes(playerHorde);
+
+
+    FILE* savefile = fopen("partiebin.clb", "wb"); // On ouvre le fichier de sauvegarde en mode écriture binaire
+
+    fwrite(&sizeRoi, sizeof(long), 1, savefile); // Écrit la taille du tableau conenant la liste du roi
+    fwrite(arrRoi, sizeRoi, 1, savefile); // Écrit le tableau contenant la liste du roi
+
+    fwrite(&sizeHorde, sizeof(long), 1, savefile); // Écrit la taille du tableau conenant la liste de la horde
+    fwrite(arrHorde, sizeHorde, 1, savefile); // Écrit le tableau contenant la liste de la horde
+
+    printf("Savebin: Finished saving game to binary file.\n");
+}

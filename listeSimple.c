@@ -411,3 +411,33 @@ TListePlayer deleteList(TListePlayer l)
     }
     return temp;
 }
+
+Tunite* listToArray(TListePlayer l, int *length)
+{
+    Tunite* ptr = malloc(getSizeBytes(l));
+
+    int i = 0;
+    while(l != NULL)
+    {
+        ptr[i] = *getPtrData(l);
+        l = getPtrNextCell(l);
+        i++;
+    }
+
+    *length = i;
+
+    return ptr;
+}
+
+TListePlayer arrayToList(Tunite* arr, int length)
+{
+    TListePlayer l;
+    initListe(&l);
+
+    for(int i = 0; i < length; i++)
+    {
+        l = ajoutEnFin(l, arr[i]);
+    }
+
+    return l;
+}

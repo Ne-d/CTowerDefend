@@ -38,24 +38,19 @@ int testListeSimple() {
 
     initListe(&l);
 
-    l = ajoutEnTete(l, testUnitRoi);
-
-    l = ajoutEnN(l, 1, testUnit);
-    l = ajoutEnN(l, 1, testUnitRoi);
-    l = ajoutEnN(l, 1, testUnit);
-
+    l = ajoutEnFin(l, testUnit);
     l = ajoutEnFin(l, testUnitRoi);
+    l = ajoutEnFin(l, testUnit);
 
-    afficheListeShort(l);
+    Tunite* save;
+    int length;
 
-    //l = suppEnTete(l);
+    save = listToArray(l, &length);
 
-    //l = suppEnFin(l);
+    for(int i = 0; i < length; i++)
+    {
+        printUniteShort(save[i]);
+    }
 
-    afficheListeShort(l);
-
-    l = suppEnN(l, 5);
-
-    afficheListeShort(l);
     return 0;
 }

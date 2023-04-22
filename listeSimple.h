@@ -32,4 +32,7 @@ int getNbreCell(T_liste l);
 int getSizeBytes(T_liste l);
 TListePlayer deleteList(TListePlayer l);
 
+Tunite* listToArray(TListePlayer l, int *length);
+TListePlayer arrayToList(Tunite* arr, int length);
+
 #endif // LISTESIMPLE_H_INCLUDED
