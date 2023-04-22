@@ -81,6 +81,8 @@ int main(int argc, char* argv[])
         // For debug purposes only
         //jeu[4][9] = creeArcher(4, 9);
 
+
+
         printf("End initialization.\n\n");
 
 
@@ -162,7 +164,7 @@ int main(int argc, char* argv[])
             if ( pKeyStates[SDL_SCANCODE_D] )
             {
                 /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
-
+                saveseq(playerRoi,playerHorde);
                 // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
                 message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
 
@@ -175,7 +177,7 @@ int main(int argc, char* argv[])
             if ( pKeyStates[SDL_SCANCODE_S] )
             {
                 /* Ajouter vos appels de fonctions ci-dessous qd le joueur appyue sur S */
-
+                loadseq(&playerRoi,&playerHorde);
                 // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
                 message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
 

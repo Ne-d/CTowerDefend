@@ -42,10 +42,8 @@ TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite);
 void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau);
 void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi);
 void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface);
-void savebin();
-void saveseq();
-void loadbin();
-void loadseq();
+void saveseq(TListePlayer roi, TListePlayer horde);
+void loadseq(TListePlayer* roi, TListePlayer* horde);
 
 
 #endif // TOWERDEFEND_H_INCLUDED

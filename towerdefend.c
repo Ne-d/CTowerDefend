@@ -4,6 +4,8 @@
 #include "maSDL.h"
 #include "towerdefend.h"
 #include "listeSimple.h"
+#define BINAIRE "partiebin.clb"
+#define SEQUENTIEL "partieseq.cls"
 
 
 //typedef Tunite* ** TplateauJeu;
@@ -600,4 +602,147 @@ void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface)
         if(getPtrNextCell(player) != NULL) player = getPtrNextCell(player);
     }
     while(getPtrNextCell(player) != NULL);
+}
+
+void saveseq(TListePlayer roi, TListePlayer horde){
+    FILE* file = fopen("partieseq.cls", "w"); // Ouvrir le fichier "partieseq.cls" en écriture "w"
+    if (file == NULL)
+        return;
+
+    TListePlayer temp;
+    fprintf(file, "roi\n"); // fprintf ça écrit dans le fichier, ça s'utilise comme printf
+    for (temp = roi; !listeVide(temp); temp = getPtrNextCell(temp))
+    {
+        Tunite* unite = getPtrData(temp);
+        fprintf(file, "%d ", unite->nom);
+        fprintf(file, "%d ", unite->posX);
+        fprintf(file, "%d ", unite->posY);
+        fprintf(file, "%d ", unite->pointsDeVie);
+        fprintf(file, "\n");
+    }
+    fprintf(file, "fin_roi\n");
+
+    // Horde
+    fprintf(file, "horde\n");
+    for (temp = horde; !listeVide(temp); temp = getPtrNextCell(temp))
+    {
+        Tunite* unite = getPtrData(temp);
+        fprintf(file, "%d ", unite->nom);
+        fprintf(file, "%d ", unite->posX);
+        fprintf(file, "%d ", unite->posY);
+        fprintf(file, "%d ", unite->pointsDeVie);
+        fprintf(file, "\n");
+    }
+    fprintf(file, "fin_horde\n");
+
+    fclose(file); // Oublie pas de fermer le fichier sinon tu vas te faire taper
+    printf("Le jeu a bien ete sauvegarde via le systeme sequentiel\n");
+}
+
+void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs pour pouvoir les modifier dans la fonction
+{
+    FILE* file = fopen("partieseq.cls", "r");
+    if (file == NULL)
+        return;
+
+    //Roi
+    char roiStr[100];
+    fscanf(file, "%s", roiStr); // fscanf ça lit dans le fichier jusqu'au prochain espace ou \n, ça s'utilise comme scanf
+    if (strcmp(roiStr, "roi") != 0)
+        return;
+
+    *roi = deleteList(*roi); // Supprime la liste pour partir sur un truc neuf
+
+    int iters = 0; // Pour être sûr de pas faire de boucle infinie
+    while (iters < 1024)
+    {
+        iters++;
+
+        Tunite* unite = NULL;
+        int nom;
+        int x, y, pointsDeVie;
+
+        fscanf(file, "%s", roiStr);
+        if (strcmp(roiStr, "fin_roi") != 0)
+            nom = atoi(roiStr);
+        else
+            break;
+
+        fscanf(file, "%d", &x);
+        fscanf(file, "%d", &y);
+        fscanf(file, "%d", &pointsDeVie);
+
+        switch (nom)
+        {
+        case tourRoi:
+            unite = creeTourRoi(x, y);
+            unite->pointsDeVie = pointsDeVie; //Uniquement le roi perd des PV
+            break;
+        case tourAir:
+            unite = creeTourAir(x, y);
+            break;
+        case tourSol:
+            unite = creeTourSol(x, y);
+            break;
+        default:
+            break;
+        }
+
+        *roi = AjouterUnite(*roi, unite);
+    }
+
+    //Horde
+    char hordeStr[100];
+    fscanf(file, "%s", hordeStr);
+    if (strcmp(hordeStr, "horde") != 0)
+        return;
+
+    *horde = deleteList(*horde);
+
+    iters = 0;
+    while (iters < 1024)
+    {
+        iters++;
+
+        Tunite* unite = NULL;
+        int nom;
+        int x, y, pointsDeVie;
+
+        fscanf(file, "%s", hordeStr);
+        if (strcmp(hordeStr, "fin_horde") != 0)
+            nom = atoi(hordeStr);
+        else
+            break;
+
+        fscanf(file, "%d", &x);
+        fscanf(file, "%d", &y);
+        fscanf(file, "%d", &pointsDeVie);
+
+        switch (nom)
+        {
+        case archer:
+            unite = creeArcher(x, y);
+            unite->pointsDeVie = pointsDeVie;
+            break;
+        case chevalier:
+            unite = creeChevalier(x, y);
+            unite->pointsDeVie = pointsDeVie;
+            break;
+        case dragon:
+            unite = creeDragon(x, y);
+            unite->pointsDeVie = pointsDeVie;
+            break;
+        case gargouille:
+            unite = creeGargouille(x, y);
+            unite->pointsDeVie = pointsDeVie;
+            break;
+        default:
+            break;
+        }
+
+        *horde = AjouterUnite(*horde, unite);
+    }
+
+    fclose(file);
+    printf("Fin du chargement\n");
 }

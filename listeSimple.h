@@ -27,6 +27,6 @@ void swapPtrData(T_liste source, T_liste destination);
 
 int getNbreCell(T_liste l);
 int getSizeBytes(T_liste l);
-
+TListePlayer deleteList(TListePlayer l);
 
 #endif // LISTESIMPLE_H_INCLUDED

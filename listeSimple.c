@@ -342,3 +342,13 @@ int getSizeBytes(T_liste l)
 {
     return getNbreCell(l) * (sizeof(struct T_cell) * sizeof(int));
 }
+
+TListePlayer deleteList(TListePlayer l)
+{
+    TListePlayer temp;
+    for (temp = l; !listeVide(temp);)
+    {
+        temp = suppEnTete(temp);
+    }
+    return temp;
+}
