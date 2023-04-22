@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#define BINAIRE "partiebin.clb"
+#define SEQUENTIEL "partieseq.cls"
 
 
 
