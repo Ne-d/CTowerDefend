@@ -625,6 +625,7 @@ void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface){
                 if(getPtrNextCell(targetList) != NULL) targetList = getPtrNextCell(targetList);
             }while(getPtrNextCell(targetList) != NULL);
             combat(surface,getPtrData(player),lowUnit);
+            supprimerUnite(player,lowUnit,jeu);
         }
         if(getPtrNextCell(player) != NULL) player = getPtrNextCell(player);
     }while(getPtrNextCell(player) != NULL);
