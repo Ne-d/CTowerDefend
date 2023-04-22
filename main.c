@@ -78,11 +78,6 @@ int main(int argc, char* argv[])
         playerRoi = AjouterUnite(playerRoi, creeTourRoi(4, 1));
         jeu = PositionnePlayerOnPlateau(playerRoi, jeu);
 
-        // For debug purposes only
-        //jeu[4][9] = creeArcher(4, 9);
-
-
-
         printf("End initialization.\n\n");
 
 
@@ -92,7 +87,7 @@ int main(int argc, char* argv[])
 
         // boucle principale du jeu
         int cont = 1;
-        while ( /*!tourRoiDetruite(playerRoi) ||*/ cont == 1 )   // La boucle se termine quand le roi meurt
+        while ( !tourRoiDetruite(playerRoi) && cont == 1 )   // La boucle se termine quand le roi meurt
         {
             SDL_PumpEvents(); //do events
             efface_fenetre(pWinSurf);
@@ -104,16 +99,16 @@ int main(int argc, char* argv[])
             //APPELEZ ICI VOS FONCTIONS QUI FONT EVOLUER LE JEU
 
             printf("New turn starts.\n");
-            //newTurnCombat(playerHorde,playerRoi);
+            newTurnCombat(playerHorde,playerRoi);
 
-            printf("Starting createUnit().\n");
             jeu = createUnit(&playerRoi, &playerHorde, tabParcours, jeu);
-            printf("Finished createUnit().\n");
 
             deplacement(playerHorde, tabParcours, jeu);
 
-            //duringCombat(playerRoi,jeu,pWinSurf);
-            //duringCombat(playerHorde,jeu,pWinSurf);
+            playerHorde = duringCombat(playerRoi, playerHorde, jeu, pWinSurf);
+            playerRoi = duringCombat(playerHorde, playerRoi, jeu, pWinSurf);
+
+            printf("Vie du roi: %d\n", getPtrData(playerRoi)->pointsDeVie);
 
 
             // dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque

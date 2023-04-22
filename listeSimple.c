@@ -79,19 +79,18 @@ T_liste getPtrLastCell(T_liste l)
     return l;
 }
 
-//Retourne le prochain pointeur de la liste
+//Retourne un pointeur vers la prochaine cellule de la liste
 T_liste getPtrNextCell(T_liste l)
 {
     return l->suiv;
 }
 
-//Retourne les informations du pointeur actuel
+// Retourne le pointeur vers les données de la case de la liste
 Tunite* getPtrData(T_liste l)
 {
     return l->pdata;
 }
 
-//Ajoute à la tête de la liste un nouvel élément
 T_liste ajoutEnTete(T_liste l, Tunite mydata)
 {
     // Créer une nouvelle cellule et le pointeur vers une unité.
@@ -112,10 +111,28 @@ T_liste ajoutEnTete(T_liste l, Tunite mydata)
     return newLst;
 }
 
-//Ajoute à la fin de la liste un nouvel élément
+// Ajoute à la fin de la liste un nouvel élément en passant un pointeur
+T_liste ajoutEnTeteParPtr(T_liste l, Tunite *mydata)
+{
+    // Create a new cell to work with and set its pdata pointer to the pointer given as mydata.
+    T_liste newLst = malloc(sizeof(struct T_cell));
+    newLst->pdata = mydata;
+
+    if (listeVide(l))
+    {
+        newLst->suiv = NULL;
+    }
+    else
+    {
+        newLst->suiv = l;
+    }
+
+    return newLst;
+}
+
 T_liste ajoutEnFin(T_liste l, Tunite mydata)
 {
-    // Si la liste est vide, initialise le pointeur à NULL et régler pdata à une nouvelle valeur
+    // If l is empty, initialize the pointers to NULL and set pdata to the new value
     if(listeVide(l))
     {
         l = malloc(sizeof(struct T_cell));
@@ -123,19 +140,19 @@ T_liste ajoutEnFin(T_liste l, Tunite mydata)
         l->suiv = NULL;
         *(l->pdata) = mydata;
     }
-    else // Si la liste n'est pas vide
+    else // If the list is not empty
     {
-        // Crée une nouvelle cellule.
+        // Create a new cell to work with.
         T_liste newCell = malloc(sizeof(struct T_cell));
         newCell->pdata = malloc(sizeof(Tunite));
 
-        // Assigne la nouvelle valeur à un champ de données d'une nouvelle cellule
+        // Assign the new value to the data field of the new cell
         *(newCell->pdata) = mydata;
 
-        // Cela va garder un pointeur vers la dernière cellule de la liste
+        // This will hold a pointer to the last cell of l
         T_liste lastCell = l;
 
-        // Cherche la dernière cellule de la liste
+        // Find the last cell of l
         while(lastCell->suiv != NULL)
         {
             lastCell = lastCell->suiv;
@@ -148,16 +165,48 @@ T_liste ajoutEnFin(T_liste l, Tunite mydata)
     return l;
 }
 
-//Ajoute un nouvel élément dans la liste à l'indice N
+T_liste ajoutEnFinParPtr(T_liste l, Tunite *mydata)
+{
+    // If l is empty, initialize the pointers to NULL and set pdata to the new pointer
+    if(listeVide(l))
+    {
+        l = malloc(sizeof(struct T_cell));
+        l->suiv = NULL;
+        l->pdata = mydata;
+    }
+    else // If the list is not empty
+    {
+        // Create a new cell to work with.
+        T_liste newCell = malloc(sizeof(struct T_cell));
+
+        // Assign the new value to the data field of the new cell
+        newCell->pdata = mydata;
+
+        // This will hold a pointer to the last cell of l
+        T_liste lastCell = l;
+
+        // Find the last cell of l
+        while(lastCell->suiv != NULL)
+        {
+            lastCell = lastCell->suiv;
+        }
+
+        newCell->suiv = NULL;
+        lastCell->suiv = newCell;
+    }
+
+    return l;
+}
+
 T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
 {
-    if(listeVide(l)) // Si c'est vide
+    if(listeVide(l)) // If l is empty
     {
         ajoutEnTete(l, mydata);
     }
     else if(pos == 0)
     {
-        // Crée une nouvelle cellule
+        // Create a new cell to work with.
         T_liste newCell = malloc(sizeof(struct T_cell));
         newCell->pdata = malloc(sizeof(Tunite));
         *(newCell->pdata) = mydata;
@@ -166,17 +215,18 @@ T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
 
         return newCell;
     }
-    // Si c'est pas vide et que la position n'est pas 0
+    // If l is not empty and pos is not 0
     else
     {
-        // Crée une nouvelle cellule
+        // Create a new cell to work with.
         T_liste newCell = malloc(sizeof(struct T_cell));
         newCell->pdata = malloc(sizeof(Tunite));
         *(newCell->pdata) = mydata;
 
-        // Cela va garder un pointeur vers la cellule désiré de la liste
+        // This will hold a pointer to the desired cell of l
+        T_liste desiredCellPrev = l;
 
-        // Cherche la cellule avant l'indice désiré
+        // Find the cell before the desired position
         bool reachedLastCell = false;
         for(int i = 0; i < pos - 1; i++)
         {
@@ -206,7 +256,6 @@ T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
     return l;
 }
 
-//Enlève la cellule en tête de la liste
 T_liste suppEnTete(T_liste l)
 {
     if (listeVide(l))
@@ -226,17 +275,16 @@ T_liste suppEnTete(T_liste l)
     }
 }
 
-//Enlève la cellule en fin de la liste
 T_liste suppEnFin(T_liste l)
 {
-    // Si liste vide
+    // If the list is empty
     if (listeVide(l))
     {
         return l;
     }
     else
     {
-        // Si liste à un élément
+        // If the list has one cell
         if(l->suiv == NULL)
         {
             free(l->pdata);
@@ -245,7 +293,7 @@ T_liste suppEnFin(T_liste l)
             return NULL;
         }
 
-        // Sinon, elle en a plusieurs
+        // Else, the list has more than one cell
 
         T_liste secondToLastCell = l;
 
@@ -262,16 +310,15 @@ T_liste suppEnFin(T_liste l)
     }
 }
 
-//Enlève la cellule en n-ième position de la liste
 T_liste suppEnN(T_liste l, int pos)
 {
-    // Si liste vide
+    // If the list is empty
     if(listeVide(l))
     {
         return NULL;
     }
 
-    // Si liste à un élément
+    // If the list has only one cell
     if(l->suiv == NULL)
     {
         free(l->pdata);
@@ -279,7 +326,7 @@ T_liste suppEnN(T_liste l, int pos)
         return NULL;
     }
 
-    // Si la cellule désirée est la première
+    // If the desired cell is the first
     if(pos == 0)
     {
         l = suppEnTete(l);
@@ -287,7 +334,7 @@ T_liste suppEnN(T_liste l, int pos)
         return l;
     }
 
-    // Cherche la cellule avant la cellule voulue (at position "pos")
+    // Find the cell before the desired desired cell (at position "pos")
     T_liste desiredCellPrev = l;
     for(int i = 1; i < pos; i++)
     {
@@ -297,20 +344,20 @@ T_liste suppEnN(T_liste l, int pos)
         }
     }
 
-    // Si la cellule désirée est la dernière
+    // If the desired cell is the last
     if(desiredCellPrev->suiv->suiv == NULL) {
         l = suppEnFin(l);
 
         return l;
     }
 
-    // Si la cellule désirée est dans le milieu
+    // If the desired cell is somewhere in the middle
     else
     {
-        // Garde le pointeur de la cellule après celle supp
+        // Holds a pointer to the cell after the one we delete
         T_liste newSuiv = desiredCellPrev->suiv->suiv;
 
-        // Free les cellules qu'on a retiré
+        // Free the cell we want to remove
         free(desiredCellPrev->suiv->pdata);
         free(desiredCellPrev->suiv);
 
@@ -320,7 +367,6 @@ T_liste suppEnN(T_liste l, int pos)
     }
 }
 
-//Fonction fun inutilisé mais qui permet d'échanger les données de deux cellules de listes
 void swapPtrData(T_liste source, T_liste destination)
 {
     Tunite* oldSourceData = source->pdata;
@@ -330,7 +376,6 @@ void swapPtrData(T_liste source, T_liste destination)
 
 }
 
-//Donne le nb de cellules
 int getNbreCell(T_liste l)
 {
     if(listeVide(l))
@@ -352,20 +397,17 @@ int getNbreCell(T_liste l)
     }
 }
 
-//Donne la taille d'une cellule
 int getSizeBytes(T_liste l)
 {
     return getNbreCell(l) * (sizeof(struct T_cell) * sizeof(int));
 }
 
-//Supprime une liste
 TListePlayer deleteList(TListePlayer l)
 {
-    TListePlayer firstCell = l;
     TListePlayer temp;
-    for (temp = firstCell; !listeVide(temp);)
+    for (temp = l; !listeVide(temp);)
     {
-        temp = suppEnFin(temp);
+        temp = suppEnTete(temp);
     }
     return temp;
 }

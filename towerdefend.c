@@ -287,51 +287,60 @@ Tunite *creeChevalier(int posx, int posy)
 //Retourne True si le Roi est tué
 bool tourRoiDetruite(TListePlayer playerRoi)
 {
-    return playerRoi->pdata->pointsDeVie <= 0;
+    return getPtrData(playerRoi)->pointsDeVie <= 0;
 }
 
-//Supprime l'unité quand sa vie est à 0, Si c'est la dernière unité, la liste du joueur est NULL
-//A Test
-void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu)
+// Supprime toutes les unités de la liste player qui sont morts.
+// A Test
+TListePlayer supprimerUnite(TListePlayer player, TplateauJeu jeu)
 {
-    TListePlayer new_list = player;
-    int x = UniteDetruite->posX;
-    int y = UniteDetruite->posY;
-    int index = 0;
+    TListePlayer newlist;
+    initListe(&newlist);
 
-    //On vérifie si l'unité n'a plus de PV
-    if(UniteDetruite->pointsDeVie <=0)
+    while(player != NULL) // Pour toutes les unités de la liste player
     {
-        // Trouve l'index de l'unité à détruire dans la liste en comparant les coordonnées
-        while(x != getPtrData(new_list)->posX && y != getPtrData(new_list)->posY && getPtrNextCell(new_list) != NULL)
+        if(getPtrData(player)->pointsDeVie > 0) // Si l'unité et en vie, on l'ajoute à la nouvelle liste
         {
-            new_list = getPtrNextCell(new_list);
-            index ++;
+            newlist = ajoutEnFinParPtr(newlist, getPtrData(player));
         }
-        jeu[x][y] = NULL;
-        player = suppEnN(player,index);
+        else // Sinon on la supprime du plateau.
+        {
+            jeu[getPtrData(player)->posX][getPtrData(player)->posY] = NULL;
+        }
+
+        player = getPtrNextCell(player);
     }
+
+    return newlist;
 }
 
 //Cette fonction fait combattre 2 unités entre elles
 //A test
-void combat(SDL_Surface *surface, Tunite * UniteAttaquante, Tunite * UniteCible)
+void combat(SDL_Surface *surface, Tunite *UniteAttaquante, Tunite *UniteCible)
 {
     //On vérifie si l'unité n'a pas déjà attaqué dans le tour
-    if(UniteAttaquante->peutAttaquer == 1)
+    if(UniteAttaquante->peutAttaquer == 1 && UniteAttaquante != NULL && UniteCible != NULL)
     {
-        UniteCible->pointsDeVie = UniteCible->pointsDeVie - UniteAttaquante->degats;
+        UniteCible->pointsDeVie -= UniteAttaquante->degats;
         UniteAttaquante->peutAttaquer = 0;
+
+        printf("Combat: %s attaque %s et effectue %d degats. %s a maintenant %d PV.\n",
+               stringUniteDuJeu(UniteAttaquante->nom),
+               stringUniteDuJeu(UniteCible->nom),
+               UniteAttaquante->degats,
+               stringUniteDuJeu(UniteCible->nom),
+               UniteCible->pointsDeVie);
+
         dessineAttaque(surface,UniteAttaquante,UniteCible);
     }
 }
 
-// This function creates an unit randomly for each players.
-// A test
+// This function creates a unit randomly for each player.
+// TODO: Cleanup
 TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int **chemin, TplateauJeu plateau)
 {
     // Chooses if a new tower will spawn
-    if((rand() % 100) < 2)
+    if((rand() % 100) < 5) // TODO: Change this value, this will never spawn towers
     {
         int positions[NBPOSITIONSTOWERS][2] = { {6, 5}, {5, 9}, {3, 3}, {5, 3}, {8, 13}, {5, 12} };
         int tourX = -1;
@@ -366,17 +375,13 @@ TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int *
 
             plateau[tourX][tourY] = newTower;
         }
-        else
-        {
-            printf("CreateUnit: failed to create new tower, no valid position found");
-        }
     }
 
     int spawnX = chemin[0][X];
     int spawnY = chemin[0][Y];
 
     // Choisis si une nouvelle unité de la horde va apparaitre, en fonction d'une probabilité et en vérifiant que la case est libre.
-    if((rand() % 100) < 5 && plateau[spawnX][spawnY] == NULL)
+    if((rand() % 100) < 25 && plateau[spawnX][spawnY] == NULL)
     {
         Tunite* newUnit = NULL;
         int valueUnit = rand() % 100;
@@ -384,7 +389,7 @@ TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int *
         {
             newUnit = creeGargouille(spawnX, spawnY);
             *playerHorde = AjouterUnite(*playerHorde, newUnit);
-            printf("createUnit: spawning a new gargoil.\n");
+            printf("createUnit: spawning a new gargoyle.\n");
         }
         else if(valueUnit > 25 && valueUnit < 50)
         {
@@ -415,16 +420,19 @@ TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int *
 }
 
 //A test
-//Cette fonction ajoute une unité choisit par createUnit() dans la liste des joueurs concernés
+// Cette fonction ajoute une unité choisit par createUnit() dans la liste de l'équipe choisie.
+// C'est à l'utilisateur de la fonction de passer la bonne liste en paramètre player (playerRoi ou playerHorde).
 TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite)
 {
-    //On vérifie si l'unité est à ajouter au début de la liste (le roi et les membres de la horde) ou en deuxième position (les tours)
+    //On vérifie si l'unité est à ajouter à la fin de la liste (les membres de la horde) ou en deuxième position (les tours)
     if(nouvelleUnite->nom == tourAir || nouvelleUnite->nom == tourSol)
     {
         player = ajoutEnN(player, 1, *nouvelleUnite);
     }
     else
     {
+        // Ajout en fin est mois rapide qu'en tête, mais permet de gérer les déplacement dans l'ordre d'apparition des unités, ce qui évite des embouteillages.
+        // Avec un ajout en tête, il faudrait renverser la liste pour bien gérer les déplacements.
         player = ajoutEnFin(player, *nouvelleUnite);
     }
 
@@ -438,8 +446,6 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 
     if(!listeVide(player))
     {
-        printf("Starting deplacement().\n");
-
         //On parcourt toutes les unités du joueur
         TListePlayer newlist = player;
         while(newlist != NULL)
@@ -479,8 +485,6 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
             newlist = getPtrNextCell(newlist);
         }
     }
-
-    printf("Finished deplacement().\n");
 }
 
 // TODO: This is untested.
@@ -492,44 +496,47 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
 
     // Loop through all coordinates of the TplateauJeu
     // TODO: This could be made more efficient by only looking at a square around the attacking unit.
-    for(unsigned int i = 0; i < LARGEURJEU; i++) // X coordinate
+    for(int i = 0; i < LARGEURJEU; i++) // X coordinate
     {
-        for(unsigned int j = 0; j < HAUTEURJEU; i++) // Y coordinate
+        for(int j = 0; j < HAUTEURJEU; j++) // Y coordinate
         {
             Tunite* cible = jeu[i][j];
 
-            // Checking if the target is in a position we can attack (ground or air, not coordinates)
-            if(UniteAttaquante->cibleAttaquable == cible->maposition || UniteAttaquante->cibleAttaquable == solEtAir)
+            if(cible != NULL)
             {
-                bool cibleIsEnemy = false;
-
-                // Checking if the attacker is in the king's team and the target is in the horde.
-                if( (UniteAttaquante->nom == tourRoi || UniteAttaquante->nom == tourSol || UniteAttaquante->nom == tourAir) &&
-                        (cible->nom == archer || cible->nom == chevalier || cible->nom == dragon || cible->nom == gargouille) )
+                // Checking if the target is in a position we can attack (ground or air, not coordinates)
+                if(UniteAttaquante->cibleAttaquable == cible->maposition || UniteAttaquante->cibleAttaquable == solEtAir)
                 {
-                    cibleIsEnemy = true;
-                }
+                    bool cibleIsEnemy = false;
 
-                // Alternatively, checking if the attacker is in the horde and the target is the king's tower
-                // (they don't attack the other towers)
-                if( (UniteAttaquante->nom == archer || UniteAttaquante->nom == chevalier ||
-                        UniteAttaquante->nom == dragon || UniteAttaquante->nom == gargouille) &&
-                        cible->nom == tourRoi )
-                {
-                    cibleIsEnemy = true;
-                }
-                // This feels overly complicated, but I haven't found anything better.
-
-                if(cibleIsEnemy)
-                {
-                    int deltaX = UniteAttaquante->posX - cible->posX;
-                    int deltaY = UniteAttaquante->posY - cible->posY;
-                    int distanceSquared = abs(deltaX * deltaX + deltaY * deltaY);
-
-                    // Checking if the target is in range but is not the attacker itself
-                    if(distanceSquared <= (UniteAttaquante->portee * UniteAttaquante->portee) && distanceSquared != 0)
+                    // Checking if the attacker is in the king's team and the target is in the horde.
+                    if( (UniteAttaquante->nom == tourRoi || UniteAttaquante->nom == tourSol || UniteAttaquante->nom == tourAir) &&
+                            (cible->nom == archer || cible->nom == chevalier || cible->nom == dragon || cible->nom == gargouille) )
                     {
-                        l = ajoutEnTete(l, *cible);
+                        cibleIsEnemy = true;
+                    }
+
+                    // Alternatively, checking if the attacker is in the horde and the target is the king's tower
+                    // (they don't attack the other towers)
+                    if( (UniteAttaquante->nom == archer || UniteAttaquante->nom == chevalier ||
+                            UniteAttaquante->nom == dragon || UniteAttaquante->nom == gargouille) &&
+                            cible->nom == tourRoi )
+                    {
+                        cibleIsEnemy = true;
+                    }
+                    // This feels overly complicated, but I haven't found anything better.
+
+                    if(cibleIsEnemy)
+                    {
+                        int deltaX = UniteAttaquante->posX - cible->posX;
+                        int deltaY = UniteAttaquante->posY - cible->posY;
+                        int distanceSquared = abs(deltaX * deltaX + deltaY * deltaY);
+
+                        // Checking if the target is in range but is not the attacker itself
+                        if(distanceSquared <= (UniteAttaquante->portee * UniteAttaquante->portee) && distanceSquared != 0 && cible->pointsDeVie > 0)
+                        {
+                            l = ajoutEnTeteParPtr(l, cible);
+                        }
                     }
                 }
             }
@@ -537,7 +544,6 @@ TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante)
     }
 
     return l;
-
 }
 
 // A tester
@@ -562,60 +568,62 @@ TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
     return jeu;
 }
 
-//Reset les parametres de combat pour un nouveau tour
+// Réinitialise à 1 la valeur de peutAttaquer sur toutes les unités des deux joueurs.
+// A tester
 void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi)
 {
-    do
+    while(playerHorde != NULL)
     {
         getPtrData(playerHorde)->peutAttaquer = 1;
-        if(getPtrNextCell(playerHorde) != NULL) playerHorde = getPtrNextCell(playerHorde);
+        playerHorde = getPtrNextCell(playerHorde);
     }
-    while(getPtrNextCell(playerHorde) != NULL);
 
-    do
+    while(playerRoi != NULL)
     {
         getPtrData(playerRoi)->peutAttaquer = 1;
-        if(getPtrNextCell(playerRoi) != NULL) playerRoi = getPtrNextCell(playerRoi);
+        playerRoi = getPtrNextCell(playerRoi);
     }
-    while(getPtrNextCell(playerRoi) != NULL);
 }
 
-//Fait fonctionner les combats durant un tour
-void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface)
+// Effectue tous les combats du joueur playerAttack et retourne la version mise à jour de la liste playerEnemy
+TListePlayer duringCombat(TListePlayer playerAttack, TListePlayer playerEnemy, TplateauJeu jeu, SDL_Surface *surface)
 {
-    do
+    while(playerAttack != NULL) // Pour toutes les unités de la liste playerAttack
     {
-        TListePlayer targetList = quiEstAPortee(jeu,getPtrData(player));
-        Tunite *lowUnit = NULL;
-        if(!listeVide(targetList))
+        TListePlayer targetList = quiEstAPortee(jeu, getPtrData(playerAttack));
+        Tunite *weakestTarget = NULL;
+
+        // Si la liste de cibles n'est pas vide, l'unité la plus faible peut être la première, on commence donc avec celle-ci
+        if(!listeVide(targetList)) { weakestTarget = getPtrData(targetList); }
+
+        while(targetList != NULL) // Trouve l'unité la plus faible dans la liste targetList
         {
-            do
+            if(getPtrData(targetList)->pointsDeVie < weakestTarget->pointsDeVie)
             {
-                if(getPtrData(targetList)->pointsDeVie < lowUnit->pointsDeVie)
-                {
-                    lowUnit = getPtrData(targetList);
-                }
-                if(getPtrNextCell(targetList) != NULL) targetList = getPtrNextCell(targetList);
+                weakestTarget = getPtrData(targetList);
             }
-            while(getPtrNextCell(targetList) != NULL);
-            combat(surface,getPtrData(player),lowUnit);
-            supprimerUnite(player,lowUnit,jeu);
+            targetList = getPtrNextCell(targetList);
         }
-        if(getPtrNextCell(player) != NULL) player = getPtrNextCell(player);
+
+        combat(surface, getPtrData(playerAttack), weakestTarget);
+
+        playerAttack = getPtrNextCell(playerAttack);
     }
-    while(getPtrNextCell(player) != NULL);
+
+    playerEnemy = supprimerUnite(playerEnemy, jeu);
+
+    return playerEnemy;
 }
 
-void saveseq(TListePlayer roi, TListePlayer horde){
-    FILE* file = fopen("partieseq.cls", "w"); // Ouvre le fichier "partieseq.cls" en écriture "w"
+void saveseq(TListePlayer roi, TListePlayer horde)
+{
+    FILE* file = fopen("partieseq.cls", "w"); // Ouvrir le fichier "partieseq.cls" en écriture "w"
     if (file == NULL)
         return;
 
-    TListePlayer firstCellR = roi;
-    TListePlayer firstCellH = horde;
     TListePlayer temp;
-    fprintf(file, "roi\n"); // écrit dans le fichier, ça s'utilise comme un printf
-    for (temp = firstCellR; !listeVide(temp); temp = getPtrNextCell(temp))// g changé
+    fprintf(file, "roi\n"); // fprintf ça écrit dans le fichier, ça s'utilise comme printf
+    for (temp = roi; !listeVide(temp); temp = getPtrNextCell(temp))
     {
         Tunite* unite = getPtrData(temp);
         fprintf(file, "%d ", unite->nom);
@@ -628,7 +636,7 @@ void saveseq(TListePlayer roi, TListePlayer horde){
 
     // Horde
     fprintf(file, "horde\n");
-    for (temp = firstCellH; !listeVide(temp); temp = getPtrNextCell(temp)) // g changé
+    for (temp = horde; !listeVide(temp); temp = getPtrNextCell(temp))
     {
         Tunite* unite = getPtrData(temp);
         fprintf(file, "%d ", unite->nom);
@@ -639,11 +647,11 @@ void saveseq(TListePlayer roi, TListePlayer horde){
     }
     fprintf(file, "fin_horde\n");
 
-    fclose(file); // On ferme le fichier
+    fclose(file); // Oublie pas de fermer le fichier sinon tu vas te faire taper
     printf("Le jeu a bien ete sauvegarde via le systeme sequentiel\n");
 }
 
-void loadseq(TListePlayer* roi, TListePlayer* horde) // Utilisation de pointeurs pour pouvoir les manipuler dans la fonction
+void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs pour pouvoir les modifier dans la fonction
 {
     FILE* file = fopen("partieseq.cls", "r");
     if (file == NULL)
@@ -651,13 +659,13 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // Utilisation de pointeurs
 
     //Roi
     char roiStr[100];
-    fscanf(file, "%s", roiStr); // Lit dans le fichier jusqu'au prochain espace ou \n, ça s'utilise comme scanf
+    fscanf(file, "%s", roiStr); // fscanf ça lit dans le fichier jusqu'au prochain espace ou \n, ça s'utilise comme scanf
     if (strcmp(roiStr, "roi") != 0)
         return;
 
-    *roi = deleteList(*roi); // Supprime la liste afin d'avoir une nouvelle base // g changé
+    *roi = deleteList(*roi); // Supprime la liste pour partir sur un truc neuf
 
-    int iters = 0; // Pour éviter les boucles infinies
+    int iters = 0; // Pour être sûr de pas faire de boucle infinie
     while (iters < 1024)
     {
         iters++;
@@ -680,7 +688,7 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // Utilisation de pointeurs
         {
         case tourRoi:
             unite = creeTourRoi(x, y);
-            unite->pointsDeVie = pointsDeVie; //Uniquement le roi perd des PV dans les règles
+            unite->pointsDeVie = pointsDeVie; //Uniquement le roi perd des PV
             break;
         case tourAir:
             unite = creeTourAir(x, y);
@@ -701,7 +709,7 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // Utilisation de pointeurs
     if (strcmp(hordeStr, "horde") != 0)
         return;
 
-    *horde = deleteList(*horde); // g changé
+    *horde = deleteList(*horde);
 
     iters = 0;
     while (iters < 1024)

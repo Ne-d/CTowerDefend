@@ -26,7 +26,6 @@ Tunite *creeTourRoi(int posx, int posy);
 bool tourRoiDetruite(TListePlayer player);
 TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu);
 
-
 TListePlayer quiEstAPortee(TplateauJeu jeu, Tunite *UniteAttaquante) ; //retourne la liste des cibles possibles
 void combat(SDL_Surface *surface, Tunite * UniteAttaquante, Tunite * UniteCible) ;
 TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int **chemin, TplateauJeu plateau);
@@ -37,11 +36,14 @@ Tunite *creeGargouille(int posx, int posy);
 Tunite *creeDragon(int posx, int posy);
 Tunite *creeChevalier(int posx, int posy);
 
-void supprimerUnite(TListePlayer player, Tunite *UniteDetruite, TplateauJeu jeu);
+TListePlayer supprimerUnite(TListePlayer player, TplateauJeu jeu);
 TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite);
+
 void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau);
+
 void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi);
-void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface);
+TListePlayer duringCombat(TListePlayer playerAttack, TListePlayer playerEnemy, TplateauJeu jeu, SDL_Surface *surface);
+
 void saveseq(TListePlayer roi, TListePlayer horde);
 void loadseq(TListePlayer* roi, TListePlayer* horde);
 

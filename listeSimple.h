@@ -19,6 +19,9 @@ T_liste ajoutEnTete(T_liste l, Tunite mydata);
 T_liste ajoutEnFin(T_liste l, Tunite mydata);
 T_liste ajoutEnN(T_liste l, int pos, Tunite mydata);
 
+T_liste ajoutEnTeteParPtr(T_liste l, Tunite *mydata);
+T_liste ajoutEnFinParPtr(T_liste l, Tunite *mydata);
+
 T_liste suppEnTete(T_liste l);
 T_liste suppEnFin(T_liste l);
 T_liste suppEnN(T_liste l, int pos);
