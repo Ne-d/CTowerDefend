@@ -562,6 +562,7 @@ TplateauJeu PositionnePlayerOnPlateau(TListePlayer player, TplateauJeu jeu)
     return jeu;
 }
 
+//Reset les parametres de combat pour un nouveau tour
 void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi)
 {
     do
@@ -579,6 +580,7 @@ void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi)
     while(getPtrNextCell(playerRoi) != NULL);
 }
 
+//Fait fonctionner les combats durant un tour
 void duringCombat(TListePlayer player, TplateauJeu jeu, SDL_Surface *surface)
 {
     do
