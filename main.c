@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 
         // For debug purposes only
         jeu[4][9] = creeArcher(4, 9);
-        playerHorde = AjouterUnite(playerHorde, creeArcher(5, 18));
+        playerHorde = AjouterUnite(playerHorde, creeDragon(5, 18));
         jeu = PositionnePlayerOnPlateau(playerHorde, jeu);
 
         printf("End initialization.\n\n");

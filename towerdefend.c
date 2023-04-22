@@ -492,9 +492,11 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 
             //On vérifie de combien on peut avancer l'unité suivant sa capacité de déplacement, si les cases sont occupées ou non et si la fin du chemin est atteinte
             int casesMax = 0;
+            /*
             bool autreUniteAtteinte = false;
             for(int i=0; i < currentUnit->vitessedeplacement && !autreUniteAtteinte; i++)
             {
+
                 // On ne peut avancer que si on n'a pas atteint la dernière case du chemin
                 if(indiceCaseUnit + casesMax + 1 < NBCOORDPARCOURS)
                 {
@@ -512,6 +514,13 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
                         autreUniteAtteinte = true;
                     }
                 }
+            }
+            */
+            while(indiceCaseUnit + casesMax + 1 < NBCOORDPARCOURS && // Vérifie si on ne va pas dépasser le bout du chemin
+                  /*plateau[chemin[indiceCaseUnit + casesMax][X]][chemin[indiceCaseUnit + casesMax][Y]] == NULL &&*/ // Vérifie si la case est libre
+                  casesMax <= currentUnit->vitessedeplacement) // Vérifie si on a atteint le nombre de cases maximum pour ce tour
+            {
+                casesMax++;
             }
 
             //On effectue le déplacement en changeant posX et posY dans l'unité
