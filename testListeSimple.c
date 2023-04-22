@@ -47,10 +47,9 @@ int testListeSimple() {
 
     save = listToArray(l, &length);
 
-    for(int i = 0; i < length; i++)
-    {
-        printUniteShort(save[i]);
-    }
+    TListePlayer load = arrayToList(save, length);
+
+    afficheListeShort(load);
 
     return 0;
 }

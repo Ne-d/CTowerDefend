@@ -48,7 +48,7 @@ void saveseq(TListePlayer roi, TListePlayer horde);
 void loadseq(TListePlayer* roi, TListePlayer* horde);
 
 void savebin(TListePlayer playerRoi, TListePlayer playerHorde);
-void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde);
+void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu);
 
 
 #endif // TOWERDEFEND_H_INCLUDED

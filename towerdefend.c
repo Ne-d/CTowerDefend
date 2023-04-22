@@ -754,6 +754,10 @@ void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs p
 void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
 {
     printf("Savebin: Started saving game to binary file.\n");
+
+    long sizeRoi = getSizeBytes(playerRoi);
+    long sizeHorde = getSizeBytes(playerHorde);
+
     int lenghRoi;
     int lengthHorde;
 
@@ -763,17 +767,69 @@ void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
     arrRoi = listToArray(playerRoi, &lenghRoi);
     arrHorde = listToArray(playerHorde, &lengthHorde);
 
-    long sizeRoi = getSizeBytes(playerRoi);
-    long sizeHorde = getSizeBytes(playerHorde);
 
 
     FILE* savefile = fopen("partiebin.clb", "wb"); // On ouvre le fichier de sauvegarde en mode écriture binaire
 
     fwrite(&sizeRoi, sizeof(long), 1, savefile); // Écrit la taille du tableau conenant la liste du roi
+    fwrite(&lenghRoi, sizeof(int), 1, savefile); // Écrit la longueur du tableau conenant la liste du roi
     fwrite(arrRoi, sizeRoi, 1, savefile); // Écrit le tableau contenant la liste du roi
 
     fwrite(&sizeHorde, sizeof(long), 1, savefile); // Écrit la taille du tableau conenant la liste de la horde
+    fwrite(&lengthHorde, sizeof(int), 1, savefile); // Écrit la longueur du tableau conenant la liste de la horde
     fwrite(arrHorde, sizeHorde, 1, savefile); // Écrit le tableau contenant la liste de la horde
 
+    fclose(savefile);
+
     printf("Savebin: Finished saving game to binary file.\n");
+}
+
+void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu)
+{
+    printf("Loadbin: Started loading game from binary file.\n");
+    long sizeRoi;
+    long sizeHorde;
+
+    int lengthRoi;
+    int lengthHorde;
+
+    // Réinitialise le plateau
+    for(int i = 0; i < LARGEURJEU; i++)
+    {
+        for(int j = 0; j < HAUTEURJEU; j++)
+        {
+            jeu[i][j] = NULL;
+        }
+    }
+
+
+    FILE* savefile = fopen("partiebin.clb", "rb");
+
+    fread(&sizeRoi, sizeof(long), 1, savefile);
+    fread(&lengthRoi, sizeof(int), 1, savefile);
+    Tunite* arrRoi = malloc(sizeRoi);
+    fread(arrRoi, sizeRoi, 1, savefile);
+
+    fread(&sizeHorde, sizeof(long), 1, savefile);
+    fread(&lengthHorde, sizeof(int), 1, savefile);
+    Tunite* arrHorde = malloc(sizeHorde);
+    fread(arrHorde, sizeHorde, 1, savefile);
+
+    fclose(savefile);
+
+    *playerRoi = arrayToList(arrRoi, lengthRoi);
+    *playerHorde = arrayToList(arrHorde, lengthHorde);
+
+    for(int i = 0; i < lengthRoi; i++)
+    {
+        printUniteShort(arrRoi[i]);
+    }
+
+    afficheListeShort(*playerRoi);
+    afficheListeShort(*playerHorde);
+
+    jeu = PositionnePlayerOnPlateau(*playerRoi, jeu);
+    jeu = PositionnePlayerOnPlateau(*playerHorde, jeu);
+
+    printf("Loadbin: Finished loading game from binary file.\n");
 }
