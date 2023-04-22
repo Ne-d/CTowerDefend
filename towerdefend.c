@@ -609,9 +609,11 @@ void saveseq(TListePlayer roi, TListePlayer horde){
     if (file == NULL)
         return;
 
+    TListePlayer firstCellR = roi;
+    TListePlayer firstCellH = horde;
     TListePlayer temp;
     fprintf(file, "roi\n"); // écrit dans le fichier, ça s'utilise comme un printf
-    for (temp = roi; !listeVide(temp); temp = getPtrNextCell(temp))// g changé
+    for (temp = firstCellR; !listeVide(temp); temp = getPtrNextCell(temp))// g changé
     {
         Tunite* unite = getPtrData(temp);
         fprintf(file, "%d ", unite->nom);
@@ -624,7 +626,7 @@ void saveseq(TListePlayer roi, TListePlayer horde){
 
     // Horde
     fprintf(file, "horde\n");
-    for (temp = horde; !listeVide(temp); temp = getPtrNextCell(temp)) // g changé
+    for (temp = firstCellH; !listeVide(temp); temp = getPtrNextCell(temp)) // g changé
     {
         Tunite* unite = getPtrData(temp);
         fprintf(file, "%d ", unite->nom);

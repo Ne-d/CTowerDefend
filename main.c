@@ -166,7 +166,6 @@ int main(int argc, char* argv[])
                 /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
                 saveseq(playerRoi,playerHorde);
                 // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
-                message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
 
                 //Ne pas modifiez les 4 lignes ci-dessous
                 efface_fenetre(pWinSurf);
@@ -179,7 +178,6 @@ int main(int argc, char* argv[])
                 /* Ajouter vos appels de fonctions ci-dessous qd le joueur appyue sur S */
                 loadseq(&playerRoi,&playerHorde);
                 // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
-                message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
 
                 //Ne pas modifiez les 4 lignes ci-dessous
                 efface_fenetre(pWinSurf);

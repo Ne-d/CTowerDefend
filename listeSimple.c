@@ -345,10 +345,11 @@ int getSizeBytes(T_liste l)
 
 TListePlayer deleteList(TListePlayer l)
 {
+    TListePlayer firstCell = l;
     TListePlayer temp;
-    for (temp = l; !listeVide(temp);)
+    for (temp = firstCell; !listeVide(temp);)
     {
-        temp = suppEnTete(temp);
+        temp = suppEnFin(temp);
     }
     return temp;
 }
