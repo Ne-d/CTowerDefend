@@ -44,8 +44,8 @@ void deplacement(TListePlayer player,int** chemin, TplateauJeu plateau);
 void newTurnCombat(TListePlayer playerHorde, TListePlayer playerRoi);
 TListePlayer duringCombat(TListePlayer playerAttack, TListePlayer playerEnemy, TplateauJeu jeu, SDL_Surface *surface);
 
-void saveseq(TListePlayer roi, TListePlayer horde);
-void loadseq(TListePlayer* roi, TListePlayer* horde);
+void saveseq(TListePlayer playerRoi, TListePlayer playerHorde);
+void loadseq(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu);
 
 void savebin(TListePlayer playerRoi, TListePlayer playerHorde);
 void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu);

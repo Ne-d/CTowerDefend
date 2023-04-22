@@ -606,154 +606,193 @@ TListePlayer duringCombat(TListePlayer playerAttack, TListePlayer playerEnemy, T
     return playerEnemy;
 }
 
-void saveseq(TListePlayer roi, TListePlayer horde)
+// Sauvegarde du jeu dans un fichier séquentiel
+void saveseq(TListePlayer playerRoi, TListePlayer playerHorde)
 {
-    FILE* file = fopen("partieseq.cls", "w"); // Ouvrir le fichier "partieseq.cls" en écriture "w"
-    if (file == NULL)
+    printf("Saveseq: Started saving game to sequential file.\n");
+
+    FILE* savefile = fopen("partieseq.cls", "w");
+    if(savefile == NULL)
+    {
+        printf("ERROR - Saveseq: Failed to open partieseq.cls\n");
         return;
-
-    TListePlayer temp;
-    fprintf(file, "roi\n"); // fprintf ça écrit dans le fichier, ça s'utilise comme printf
-    for (temp = roi; !listeVide(temp); temp = getPtrNextCell(temp))
-    {
-        Tunite* unite = getPtrData(temp);
-        fprintf(file, "%d ", unite->nom);
-        fprintf(file, "%d ", unite->posX);
-        fprintf(file, "%d ", unite->posY);
-        fprintf(file, "%d ", unite->pointsDeVie);
-        fprintf(file, "\n");
     }
-    fprintf(file, "fin_roi\n");
 
-    // Horde
-    fprintf(file, "horde\n");
-    for (temp = horde; !listeVide(temp); temp = getPtrNextCell(temp))
+    fprintf(savefile, "debutRoi\n");
+
+    // Pour toutes les unités de la liste playerRoi
+    TListePlayer newlist = playerRoi;
+    while(newlist != NULL)
     {
-        Tunite* unite = getPtrData(temp);
-        fprintf(file, "%d ", unite->nom);
-        fprintf(file, "%d ", unite->posX);
-        fprintf(file, "%d ", unite->posY);
-        fprintf(file, "%d ", unite->pointsDeVie);
-        fprintf(file, "\n");
-    }
-    fprintf(file, "fin_horde\n");
+        Tunite* currentUnit = getPtrData(newlist);
+        fprintf(savefile, "%d ", currentUnit->nom); // nom est une énumération donc on peut l'écrire comme un entier
+        fprintf(savefile, "%d ", currentUnit->pointsDeVie);
+        fprintf(savefile, "%d ", currentUnit->posX);
+        fprintf(savefile, "%d ", currentUnit->posY);
+        fprintf(savefile, "\n");
 
-    fclose(file); // Oublie pas de fermer le fichier sinon tu vas te faire taper
-    printf("Le jeu a bien ete sauvegarde via le systeme sequentiel\n");
+        newlist = getPtrNextCell(newlist);
+    }
+    fprintf(savefile, "finRoi\n");
+
+    fprintf(savefile, "debutHorde\n");
+
+    // Pour toutes les unités de la liste playerHorde
+    newlist = playerHorde;
+    while(newlist != NULL)
+    {
+        Tunite* currentUnit = getPtrData(newlist);
+        fprintf(savefile, "%d ", currentUnit->nom);
+        fprintf(savefile, "%d ", currentUnit->pointsDeVie);
+        fprintf(savefile, "%d ", currentUnit->posX);
+        fprintf(savefile, "%d ", currentUnit->posY);
+        fprintf(savefile, "\n");
+
+        newlist = getPtrNextCell(newlist);
+    }
+    fprintf(savefile, "finHorde\n");
+
+    fclose(savefile);
+
+    printf("Saveseq: Finished saving game to sequential file.\n");
 }
 
-void loadseq(TListePlayer* roi, TListePlayer* horde) // J'ai mis des pointeurs pour pouvoir les modifier dans la fonction
+// Chargement du jeu depuis un fichier séquentiel
+void loadseq(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu)
 {
-    FILE* file = fopen("partieseq.cls", "r");
-    if (file == NULL)
-        return;
+    printf("Loadseq: Started loading game from sequential file.\n");
 
-    //Roi
-    char roiStr[100];
-    fscanf(file, "%s", roiStr); // fscanf ça lit dans le fichier jusqu'au prochain espace ou \n, ça s'utilise comme scanf
-    if (strcmp(roiStr, "roi") != 0)
-        return;
-
-    *roi = deleteList(*roi); // Supprime la liste pour partir sur un truc neuf
-
-    int iters = 0; // Pour être sûr de pas faire de boucle infinie
-    while (iters < 1024)
+    FILE* savefile = fopen("partieseq.cls", "r");
+    if(savefile == NULL)
     {
-        iters++;
+        printf("ERROR - Loadseq: Failed to open partieseq.cls.\n");
+        return;
+    }
 
-        Tunite* unite = NULL;
-        int nom;
-        int x, y, pointsDeVie;
+    // Réinitialise les listes des joueurs
+    *playerRoi = deleteList(*playerRoi);
+    *playerHorde = deleteList(*playerHorde);
 
-        fscanf(file, "%s", roiStr);
-        if (strcmp(roiStr, "fin_roi") != 0)
-            nom = atoi(roiStr);
+
+    // Réinitialise le plateau
+    for(int i = 0; i < LARGEURJEU; i++)
+    {
+        for(int j = 0; j < HAUTEURJEU; j++)
+        {
+            jeu[i][j] = NULL;
+        }
+    }
+
+    char buffer[255];
+
+    // Début du chargement de la liste playerRoi
+    fscanf(savefile, "%s", buffer);
+    if(strcmp(buffer, "debutRoi") != 0) // Si le fichier ne commence pas par "debutRoi", alors il est incorrect
+    {
+        printf("ERROR - Loadseq: Sequential file contains incorrect data.\n");
+        return;
+    }
+
+    for(int i =0; i < 2048; i++) // 2048 est une limite arbitraire pour éviter de créer une boucle infinie
+    {
+        Tunite* currentUnit = NULL;
+        int nom, pv, x, y;
+
+        fscanf(savefile, "%s", buffer);
+        if(strcmp(buffer, "finRoi") != 0) // Si on lit "finRoi", la section de la liste du roi est terminée, donc on break pour sortir de la liste.
+            nom = atoi(buffer);
         else
             break;
 
-        fscanf(file, "%d", &x);
-        fscanf(file, "%d", &y);
-        fscanf(file, "%d", &pointsDeVie);
+        fscanf(savefile, "%d", &pv);
+        fscanf(savefile, "%d", &x);
+        fscanf(savefile, "%d", &y);
 
-        switch (nom)
+        switch(nom)
         {
         case tourRoi:
-            unite = creeTourRoi(x, y);
-            unite->pointsDeVie = pointsDeVie; //Uniquement le roi perd des PV
+            currentUnit = creeTourRoi(x, y);
+            currentUnit->pointsDeVie = pv;
             break;
         case tourAir:
-            unite = creeTourAir(x, y);
+            currentUnit = creeTourAir(x, y);
             break;
         case tourSol:
-            unite = creeTourSol(x, y);
+            currentUnit = creeTourSol(x, y);
             break;
         default:
             break;
-        }
+        } // Les tours air et sol ne se font pas attaquer, il est donc inutile de charger leurs points de vie.
 
-        *roi = AjouterUnite(*roi, unite);
+        *playerRoi = AjouterUnite(*playerRoi, currentUnit);
     }
 
-    //Horde
-    char hordeStr[100];
-    fscanf(file, "%s", hordeStr);
-    if (strcmp(hordeStr, "horde") != 0)
-        return;
-
-    *horde = deleteList(*horde);
-
-    iters = 0;
-    while (iters < 1024)
+    // Début du chargement de la liste playerHorde
+    fscanf(savefile, "%s", buffer);
+    if(strcmp(buffer, "debutHorde") != 0) // Si la section suivante ne commence pas par "debutHorde", alors elle est incorrecte
     {
-        iters++;
+        printf("ERROR - Loadseq: Sequential file contains incorrect data.\n");
+        return;
+    }
 
-        Tunite* unite = NULL;
-        int nom;
-        int x, y, pointsDeVie;
+    for(int i =0; i < 2048; i++) // 2048 est une limite arbitraire pour éviter de créer une boucle infinie
+    {
+        Tunite* currentUnit = NULL;
+        int nom, pv, x, y;
 
-        fscanf(file, "%s", hordeStr);
-        if (strcmp(hordeStr, "fin_horde") != 0)
-            nom = atoi(hordeStr);
+        fscanf(savefile, "%s", buffer);
+        if(strcmp(buffer, "finHorde") != 0) // Si on lit "finHorde", la section de la liste du roi est terminée, donc on break pour sortir de la liste.
+            nom = atoi(buffer);
         else
             break;
 
-        fscanf(file, "%d", &x);
-        fscanf(file, "%d", &y);
-        fscanf(file, "%d", &pointsDeVie);
+        fscanf(savefile, "%d", &pv);
+        fscanf(savefile, "%d", &x);
+        fscanf(savefile, "%d", &y);
 
-        switch (nom)
+        switch(nom)
         {
-        case archer:
-            unite = creeArcher(x, y);
-            unite->pointsDeVie = pointsDeVie;
-            break;
-        case chevalier:
-            unite = creeChevalier(x, y);
-            unite->pointsDeVie = pointsDeVie;
-            break;
         case dragon:
-            unite = creeDragon(x, y);
-            unite->pointsDeVie = pointsDeVie;
+            currentUnit = creeDragon(x, y);
+            currentUnit->pointsDeVie = pv;
             break;
         case gargouille:
-            unite = creeGargouille(x, y);
-            unite->pointsDeVie = pointsDeVie;
+            currentUnit = creeGargouille(x, y);
+            currentUnit->pointsDeVie = pv;
+            break;
+        case archer:
+            currentUnit = creeArcher(x, y);
+            currentUnit->pointsDeVie = pv;
+            break;
+        case chevalier:
+            currentUnit = creeChevalier(x, y);
+            currentUnit->pointsDeVie = pv;
             break;
         default:
             break;
         }
-
-        *horde = AjouterUnite(*horde, unite);
+        *playerHorde = AjouterUnite(*playerHorde, currentUnit);
     }
 
-    fclose(file);
-    printf("Fin du chargement\n");
+    fclose(savefile);
+
+    jeu = PositionnePlayerOnPlateau(*playerRoi, jeu);
+    jeu = PositionnePlayerOnPlateau(*playerHorde, jeu);
+
+    printf("Loadseq: Finished loading game from sequential file.\n");
 }
 
-//Sauvegarde en binaire
+// Sauvegarde du jeu dans un fichier binaire en transformant les listes en tableaux, qu'on écrit dans le fichier.
 void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
 {
     printf("Savebin: Started saving game to binary file.\n");
+
+    FILE* savefile = fopen("partiebin.clb", "wb"); // On ouvre le fichier de sauvegarde en mode écriture binaire
+    if(savefile == NULL)
+    {
+        printf("ERROR - Savebin: Failed to open partiebin.clb.\n");
+        return;
+    }
 
     long sizeRoi = getSizeBytes(playerRoi);
     long sizeHorde = getSizeBytes(playerHorde);
@@ -767,9 +806,7 @@ void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
     arrRoi = listToArray(playerRoi, &lenghRoi);
     arrHorde = listToArray(playerHorde, &lengthHorde);
 
-
-
-    FILE* savefile = fopen("partiebin.clb", "wb"); // On ouvre le fichier de sauvegarde en mode écriture binaire
+    // On écrit les données dans l'ordre: tailleTableauRoi, longueurTableauRoi, TableauRoi, tailleTableauHorde, longueurTableauHorde, TableauHorde.
 
     fwrite(&sizeRoi, sizeof(long), 1, savefile); // Écrit la taille du tableau conenant la liste du roi
     fwrite(&lenghRoi, sizeof(int), 1, savefile); // Écrit la longueur du tableau conenant la liste du roi
@@ -784,9 +821,18 @@ void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
     printf("Savebin: Finished saving game to binary file.\n");
 }
 
+// Chargement du jeu depuis un fichier binaire, en convertissant les tableaux stockés dans le fichier en listes.
 void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu)
 {
     printf("Loadbin: Started loading game from binary file.\n");
+
+    FILE* savefile = fopen("partiebin.clb", "rb");
+    if(savefile == NULL)
+    {
+        printf("ERROR - Loadbin: Failed to open partiebin.clb.\n");
+        return;
+    }
+
     long sizeRoi;
     long sizeHorde;
 
@@ -802,8 +848,7 @@ void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu
         }
     }
 
-
-    FILE* savefile = fopen("partiebin.clb", "rb");
+    // Lis les données dans le même ordre qu'on les a écrit.
 
     fread(&sizeRoi, sizeof(long), 1, savefile);
     fread(&lengthRoi, sizeof(int), 1, savefile);
@@ -817,17 +862,11 @@ void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu
 
     fclose(savefile);
 
+    // Restaure la valeur des listes des joueurs
     *playerRoi = arrayToList(arrRoi, lengthRoi);
     *playerHorde = arrayToList(arrHorde, lengthHorde);
 
-    for(int i = 0; i < lengthRoi; i++)
-    {
-        printUniteShort(arrRoi[i]);
-    }
-
-    afficheListeShort(*playerRoi);
-    afficheListeShort(*playerHorde);
-
+    // Actualise le plateau
     jeu = PositionnePlayerOnPlateau(*playerRoi, jeu);
     jeu = PositionnePlayerOnPlateau(*playerHorde, jeu);
 

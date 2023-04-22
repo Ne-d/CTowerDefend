@@ -138,10 +138,7 @@ int main(int argc, char* argv[])
             const Uint8* pKeyStates = SDL_GetKeyboardState(NULL);
             if ( pKeyStates[SDL_SCANCODE_V] )
             {
-                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
-
-                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
-                message("Sauvegarde","Placer ici votre fonction de restauration/sauvegarde");
+                loadseq(&playerRoi, &playerHorde, jeu);
 
                 //Ne pas modifiez les 4 lignes ci-dessous
                 efface_fenetre(pWinSurf);
@@ -151,11 +148,7 @@ int main(int argc, char* argv[])
             }
             if ( pKeyStates[SDL_SCANCODE_C] )
             {
-                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur C */
-
                 loadbin(&playerRoi, &playerHorde, jeu);
-
-                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
 
                 //Ne pas modifiez les 4 lignes ci-dessous
                 efface_fenetre(pWinSurf);
@@ -165,9 +158,7 @@ int main(int argc, char* argv[])
             }
             if ( pKeyStates[SDL_SCANCODE_D] )
             {
-                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appuye sur D */
-                saveseq(playerRoi,playerHorde);
-                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
+                saveseq(playerRoi, playerHorde);
 
                 //Ne pas modifiez les 4 lignes ci-dessous
                 efface_fenetre(pWinSurf);
@@ -177,9 +168,7 @@ int main(int argc, char* argv[])
             }
             if ( pKeyStates[SDL_SCANCODE_S] )
             {
-                /* Ajouter vos appels de fonctions ci-dessous qd le joueur appyue sur S */
                 savebin(playerRoi, playerHorde);
-                // APPELEZ ICI VOTRE FONCTION DE SAUVEGARDE/RESTAURATION DEMANDEE
 
                 //Ne pas modifiez les 4 lignes ci-dessous
                 efface_fenetre(pWinSurf);
