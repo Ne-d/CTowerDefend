@@ -1,31 +1,39 @@
 #include "stdio.h"
 #include "towerDefendTypes.h"
 
+// Retourne une chaîne de caractères contenant le nom d'une unité selon son type.
 char* stringUniteDuJeu(TuniteDuJeu u) {
     char* type = "";
 
     switch(u) {
         case tourSol:
-            type = "Tour Sol"; break;
+            type = "Tour Sol";
+            break;
         case tourAir:
-            type = "Tour Air"; break;
+            type = "Tour Air";
+            break;
         case tourRoi:
-            type = "Tour Roi"; break;
+            type = "Tour Roi";
+            break;
         case archer:
-            type = "Archer"; break;
+            type = "Archer";
+            break;
         case chevalier:
-            type = "Chevalier"; break;
+            type = "Chevalier";
+            break;
         case dragon:
-            type = "Dragon"; break;
+            type = "Dragon";
+            break;
         case gargouille:
-            type = "Gargouille"; break;
+            type = "Gargouille";
+            break;
     }
 
     return type;
 
 }
 
-
+// // Retourne une chaîne de caractères contenant le nom d'un type de cible.
 char* stringCible(Tcible c) {
     char* cible = "";
 
@@ -42,6 +50,7 @@ char* stringCible(Tcible c) {
     return cible;
 }
 
+// Affiche toutes les informations sur une unité.
 void printUnite(Tunite u) {
     printf("Type d'unite: %s\n", stringUniteDuJeu(u.nom));
     printf("Cibles attaquable: %s\n", stringCible(u.cibleAttaquable));
@@ -57,6 +66,7 @@ void printUnite(Tunite u) {
     printf("Peut attaquer: %s\n", u.peutAttaquer ? "Oui" : "Non");
 }
 
+// Affiche le nom d'une unité.
 void printUniteShort(Tunite u)
 {
     printf("Type d'unite: %s\n", stringUniteDuJeu(u.nom));

@@ -42,7 +42,7 @@ void afficheListe(T_liste l)
     }
 }
 
-// Même chose, mais affiche juste les noms
+// Affiche les noms des unités dans la liste en paramètre
 void afficheListeShort(T_liste l)
 {
     if(listeVide(l))
@@ -91,6 +91,7 @@ Tunite* getPtrData(T_liste l)
     return l->pdata;
 }
 
+// Ajoute un élément au début d'une liste
 T_liste ajoutEnTete(T_liste l, Tunite mydata)
 {
     // Créer une nouvelle cellule et le pointeur vers une unité.
@@ -111,7 +112,7 @@ T_liste ajoutEnTete(T_liste l, Tunite mydata)
     return newLst;
 }
 
-// Ajoute à la fin de la liste un nouvel élément en passant un pointeur
+// Ajoute au début de la liste un nouvel élément en passant un pointeur
 T_liste ajoutEnTeteParPtr(T_liste l, Tunite *mydata)
 {
     // Créez une nouvelle cellule avec laquelle travailler et attribuer le pointeur pdata au pointeur donné mydata.
@@ -130,6 +131,7 @@ T_liste ajoutEnTeteParPtr(T_liste l, Tunite *mydata)
     return newLst;
 }
 
+// Ajoute un élément à la fin d'une liste
 T_liste ajoutEnFin(T_liste l, Tunite mydata)
 {
     // Si c'est vide, initialise le pointeur a NULL et set pdata a la nouvelle valeur
@@ -165,6 +167,7 @@ T_liste ajoutEnFin(T_liste l, Tunite mydata)
     return l;
 }
 
+// Ajoute un élément à la fin d'une liste en passant un pointeur
 T_liste ajoutEnFinParPtr(T_liste l, Tunite *mydata)
 {
     // Si c'est vide, initialise le pointeur a NULL et set pdata au nouveau pointeur
@@ -198,6 +201,7 @@ T_liste ajoutEnFinParPtr(T_liste l, Tunite *mydata)
     return l;
 }
 
+// Ajoute un élément à une case de la liste, choisie par le paramètre pos.
 T_liste ajoutEnN(T_liste l, int pos, Tunite mydata)
 {
     if(listeVide(l)) // Si liste vide
@@ -370,7 +374,7 @@ T_liste suppEnN(T_liste l, int pos)
     }
 }
 
-//Echange les données de deux pointeurs
+// Echange deux cases dans la liste sans toucher aux données, mais en échangeant les pointeurs
 void swapPtrData(T_liste source, T_liste destination)
 {
     Tunite* oldSourceData = source->pdata;
@@ -380,7 +384,7 @@ void swapPtrData(T_liste source, T_liste destination)
 
 }
 
-// Pour obtenir le nb de cellule dans la liste
+// Retourne le nombre de cellules dans la liste
 int getNbreCell(T_liste l)
 {
     if(listeVide(l))
@@ -402,14 +406,14 @@ int getNbreCell(T_liste l)
     }
 }
 
-// Obtenir la taille d'une cellule
+// Retourne la taille totale en mémoire d'une liste
 int getSizeBytes(T_liste l)
 {
     return getNbreCell(l) * (sizeof(struct T_cell) * sizeof(int));
 }
 
 // Supprime une liste
-TListePlayer deleteList(TListePlayer l)
+T_liste supprimeListe(TListePlayer l)
 {
     TListePlayer temp;
     for (temp = l; !listeVide(temp);)
@@ -419,7 +423,7 @@ TListePlayer deleteList(TListePlayer l)
     return temp;
 }
 
-// Liste -> Tableau
+// Retourne un tableau qui contient toutes les données de la liste l, bout à bout.
 Tunite* listToArray(TListePlayer l, int *length)
 {
     Tunite* ptr = malloc(getSizeBytes(l));
@@ -437,8 +441,8 @@ Tunite* listToArray(TListePlayer l, int *length)
     return ptr;
 }
 
-// Tableau -> Liste
-TListePlayer arrayToList(Tunite* arr, int length)
+// Retourne une liste qui contient toutes les données du tableau arr.
+T_liste arrayToList(Tunite* arr, int length)
 {
     TListePlayer l;
     initListe(&l);

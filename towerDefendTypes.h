@@ -1,7 +1,7 @@
 #ifndef TOWERDEFENDTYPES_H_INCLUDED
 #define TOWERDEFENDTYPES_H_INCLUDED
 
-// Contains all the types needed for the game.
+// Contient tous les types nécessaires au jeu, et des fonctions liées à ceux-ci.
 
 typedef enum{tourSol, tourAir, tourRoi, archer, chevalier, dragon, gargouille} TuniteDuJeu;
 typedef enum{sol, solEtAir, air } Tcible;
@@ -36,10 +36,11 @@ typedef struct T_cell{
 } *TListePlayer;
 
 
-typedef Tunite* ** TplateauJeu;  ////tableau a deux dimensions de largeur 11 et hauteur 19 contenant des pointeurs (Tunite*)
+typedef Tunite* ** TplateauJeu;  // Tableau a deux dimensions de largeur 11 et hauteur 19 contenant des pointeurs (Tunite*)
 
 char* stringUniteDuJeu(TuniteDuJeu u);
 char* stringCible(Tcible c);
+
 void printUnite(Tunite u);
 void printUniteShort(Tunite u);
 

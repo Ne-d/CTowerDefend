@@ -4,24 +4,18 @@
 #include "SDL.h"
 #include "maSDL.h"    //bibliothèque avec des fonctions d'affichage utilisant la SDL
 #include "towerdefend.h"
-#include "testListeSimple.h"
+#include "listeSimple.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 #define BINAIRE "partiebin.clb"
 #define SEQUENTIEL "partieseq.cls"
-
 
 
 /*--------- Main ---------------------*/
 int main(int argc, char* argv[])
 {
-    /*
-    testListeSimple();
-
-    return 0;
-    */
-
     SDL_Window *pWindow;
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -114,15 +108,15 @@ int main(int argc, char* argv[])
             playerHorde = duringCombat(playerRoi, playerHorde, jeu, pWinSurf);
             playerRoi = duringCombat(playerHorde, playerRoi, jeu, pWinSurf);
 
-            printf("Vie du roi: %d\n", getPtrData(playerRoi)->pointsDeVie);
-
-
-            // dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque
-
-
-            // utiliser dessineAttaque dans votre fonction de combat va vous obliger à ajouter un argument lié à la SDL
-            // -> SDL_Surface *surface
-            // regarder le prototype de dessineAttaque dans maSDL.c pour (mieux) comprendre
+            if(playerRoi != NULL)
+            {
+                printf("Vie du roi: %d\n", getPtrData(playerRoi)->pointsDeVie);
+            }
+            else
+            {
+                printf("\nGame Over: Defaite du Roi, victoire de la Horde.\n");
+                return 0;
+            }
 
             /*                                                                     */
             /*                                                                     */
@@ -131,7 +125,7 @@ int main(int argc, char* argv[])
             //affichage du jeu à chaque tour
 
             maj_fenetre(pWindow);
-            SDL_Delay(150);  //valeur du délai à modifier éventuellement
+            SDL_Delay(150);  // Valeur du délai à modifier éventuellement
 
 
             //LECTURE DE CERTAINES TOUCHES POUR LANCER LES RESTAURATIONS ET SAUVEGARDES

@@ -4,11 +4,9 @@
 #include "maSDL.h"
 #include "towerdefend.h"
 #include "listeSimple.h"
+
 #define BINAIRE "partiebin.clb"
 #define SEQUENTIEL "partieseq.cls"
-
-
-//typedef Tunite* ** TplateauJeu;
 
 TplateauJeu AlloueTab2D(int largeur, int hauteur)
 {
@@ -20,6 +18,7 @@ TplateauJeu AlloueTab2D(int largeur, int hauteur)
     }
     return jeu;  //tab2D contenant des pointeurs
 }
+
 void initPlateauAvecNULL(TplateauJeu jeu,int largeur, int hauteur)
 {
     for (int i=0; i<largeur; i++)
@@ -67,6 +66,7 @@ void ecritCheminVersleHaut(int **chemin, int *ichemin, int *xdepart, int *ydepar
     }
     else printf("erreur longueur chemin\n");
 }
+
 void ecritCheminVerslaDroite(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante)
 {
     if ((*distanceMaxRestante - distance)>=0)
@@ -82,6 +82,7 @@ void ecritCheminVerslaDroite(int **chemin, int *ichemin, int *xdepart, int *ydep
     }
     else printf("erreur longueur chemin\n");
 }
+
 void ecritCheminVerslaGauche(int **chemin, int *ichemin, int *xdepart, int *ydepart, int distance, int *distanceMaxRestante)
 {
     if ((*distanceMaxRestante - distance)>=0)
@@ -284,7 +285,7 @@ Tunite *creeChevalier(int posx, int posy)
     return nouv;
 }
 
-//Retourne True si le Roi est tué
+//Retourne true si le Roi est tué
 bool tourRoiDetruite(TListePlayer playerRoi)
 {
     return getPtrData(playerRoi)->pointsDeVie <= 0;
@@ -337,7 +338,7 @@ void combat(SDL_Surface *surface, Tunite *UniteAttaquante, Tunite *UniteCible)
 TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int **chemin, TplateauJeu plateau)
 {
     // Choisie si une nouvelle tour spawn
-    if((rand() % 100) < 5)
+    if((rand() % 100) < 2)
     {
         int positions[NBPOSITIONSTOWERS][2] = { {6, 5}, {5, 9}, {3, 3}, {5, 3}, {8, 13}, {5, 12} };
         int tourX = -1;
@@ -611,7 +612,7 @@ void saveseq(TListePlayer playerRoi, TListePlayer playerHorde)
 {
     printf("Saveseq: Started saving game to sequential file.\n");
 
-    FILE* savefile = fopen("partieseq.cls", "w");
+    FILE* savefile = fopen("SEQUENTIEL", "w");
     if(savefile == NULL)
     {
         printf("ERROR - Saveseq: Failed to open partieseq.cls\n");
@@ -662,7 +663,7 @@ void loadseq(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu
 {
     printf("Loadseq: Started loading game from sequential file.\n");
 
-    FILE* savefile = fopen("partieseq.cls", "r");
+    FILE* savefile = fopen("SEQUENTIEL", "r");
     if(savefile == NULL)
     {
         printf("ERROR - Loadseq: Failed to open partieseq.cls.\n");
@@ -670,8 +671,8 @@ void loadseq(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu
     }
 
     // Réinitialise les listes des joueurs
-    *playerRoi = deleteList(*playerRoi);
-    *playerHorde = deleteList(*playerHorde);
+    *playerRoi = supprimeListe(*playerRoi);
+    *playerHorde = supprimeListe(*playerHorde);
 
 
     // Réinitialise le plateau
@@ -787,7 +788,7 @@ void savebin(TListePlayer playerRoi, TListePlayer playerHorde)
 {
     printf("Savebin: Started saving game to binary file.\n");
 
-    FILE* savefile = fopen("partiebin.clb", "wb"); // On ouvre le fichier de sauvegarde en mode écriture binaire
+    FILE* savefile = fopen("BINAIRE", "wb"); // On ouvre le fichier de sauvegarde en mode écriture binaire
     if(savefile == NULL)
     {
         printf("ERROR - Savebin: Failed to open partiebin.clb.\n");
@@ -826,7 +827,7 @@ void loadbin(TListePlayer* playerRoi, TListePlayer* playerHorde, TplateauJeu jeu
 {
     printf("Loadbin: Started loading game from binary file.\n");
 
-    FILE* savefile = fopen("partiebin.clb", "rb");
+    FILE* savefile = fopen("BINAIRE", "rb");
     if(savefile == NULL)
     {
         printf("ERROR - Loadbin: Failed to open partiebin.clb.\n");
