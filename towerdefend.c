@@ -421,27 +421,35 @@ TplateauJeu createUnit(TListePlayer *playerRoi, TListePlayer *playerHorde, int *
     // Choisis si une nouvelle unité de la horde va apparaitre, en fonction d'une probabilité et en vérifiant que la case est libre.
     if(randNbH < 10 && plateau[spawnX][spawnY] == NULL)
     {
+        Tunite* newUnit = NULL;
         printf("createUnit: a new unit of the horde will spawn.\n");
         int valueUnit = rand() % 100;
         if(valueUnit < 25)
         {
-            *playerHorde = AjouterUnite(*playerHorde, creeGargouille(spawnX, spawnY));
+            newUnit = creeGargouille(spawnX, spawnY);
+            *playerHorde = AjouterUnite(*playerHorde, newUnit);
+            printf("createUnit: spawning a new gargoil.\n");
         }
         else if(valueUnit > 25 && valueUnit < 50)
         {
-            *playerHorde = AjouterUnite(*playerHorde, creeArcher(spawnX, spawnY));
+            newUnit = creeArcher(spawnX, spawnY);
+            *playerHorde = AjouterUnite(*playerHorde, newUnit);
+            printf("createUnit: spawning a new archer.\n");
         }
         else if(valueUnit > 50 && valueUnit < 75)
         {
-            *playerHorde = AjouterUnite(*playerHorde, creeChevalier(spawnX, spawnY));
+            newUnit = creeChevalier(spawnX, spawnY);
+            *playerHorde = AjouterUnite(*playerHorde, newUnit);
+            printf("createUnit: spawning a new knight.\n");
         }
         else
         {
-            *playerHorde = AjouterUnite(*playerHorde, creeDragon(spawnX, spawnY));
+            newUnit = creeDragon(spawnX, spawnY);
+            *playerHorde = AjouterUnite(*playerHorde, newUnit);
+            printf("createUnit: spawning a new dragon.\n");
         }
 
-        plateau[spawnX][spawnY] = getPtrData(*playerHorde);
-        printf("createUnit: spawning a new unit of the horde.\n");
+        plateau[spawnX][spawnY] = newUnit;
     }
 
     //plateau = PositionnePlayerOnPlateau(playerHorde, plateau);
@@ -471,11 +479,14 @@ TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite)
 // TODO: A tester
 void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 {
+
     if(!listeVide(player))
     {
+        printf("Starting deplacement().\n");
+
         //On parcourt toutes les unités du joueur
         TListePlayer newlist = player;
-        do
+        while(newlist != NULL)
         {
             Tunite* currentUnit = getPtrData(newlist);
             int originX = currentUnit->posX;
@@ -487,8 +498,6 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
             {
                 indiceCaseUnit ++;
             }
-
-            printf("Indice case unit: %d\n", indiceCaseUnit);
 
             //On vérifie de combien on peut avancer l'unité suivant sa capacité de déplacement, si les cases sont occupées ou non et si la fin du chemin est atteinte
             int casesMax = 0;
@@ -506,20 +515,16 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 
             currentUnit->posX = newX;
             currentUnit->posY = newY;
-            printf("CasesMax = %d\n", casesMax);
 
             // On effectue le déplacement de manière graphique en supprimant l'unité de son ancienne case et en la rajoutant aux nouvelles coordonnées.
             plateau[originX][originY] = NULL;
             plateau[newX][newY] = currentUnit;
 
-
-            if(getPtrNextCell(newlist) != NULL)
-            {
-                newlist = getPtrNextCell(newlist);
-            }
+            newlist = getPtrNextCell(newlist);
         }
-        while(getPtrNextCell(newlist) != NULL);
     }
+
+    printf("Finished deplacement().\n");
 }
 
 // TODO: This is untested.
