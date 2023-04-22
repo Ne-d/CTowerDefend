@@ -77,9 +77,7 @@ int main(int argc, char* argv[])
         jeu = PositionnePlayerOnPlateau(playerRoi, jeu);
 
         // For debug purposes only
-        jeu[4][9] = creeArcher(4, 9);
-        playerHorde = AjouterUnite(playerHorde, creeDragon(5, 18));
-        jeu = PositionnePlayerOnPlateau(playerHorde, jeu);
+        //jeu[4][9] = creeArcher(4, 9);
 
         printf("End initialization.\n\n");
 
@@ -102,19 +100,19 @@ int main(int argc, char* argv[])
             //APPELEZ ICI VOS FONCTIONS QUI FONT EVOLUER LE JEU
 
             printf("New turn starts.\n");
-            /*
+            newTurnCombat(playerHorde,playerRoi);
+
             printf("Starting createUnit().\n");
             jeu = createUnit(&playerRoi, &playerHorde, tabParcours, jeu);
             printf("Finished createUnit().\n");
-            */
-            newTurnCombat(playerHorde,playerRoi);
+
+            afficheListeShort(playerHorde);
+
             printf("Starting deplacement().\n");
             deplacement(playerHorde, tabParcours, jeu);
             duringCombat(playerRoi,jeu,pWinSurf);
             duringCombat(playerHorde,jeu,pWinSurf);
             printf("Finished deplacement().\n");
-
-
 
 
             // dans votre fonction "combat" que vous appelerez ici, dans son code utiliser dessineAttaque

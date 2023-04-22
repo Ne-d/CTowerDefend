@@ -12,7 +12,7 @@ char* stringUniteDuJeu(TuniteDuJeu u) {
         case tourRoi:
             type = "Tour Roi"; break;
         case archer:
-            type = "Tour Roi"; break;
+            type = "Archer"; break;
         case chevalier:
             type = "Chevalier"; break;
         case dragon:

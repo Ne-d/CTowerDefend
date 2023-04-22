@@ -461,7 +461,7 @@ TListePlayer AjouterUnite(TListePlayer player, Tunite *nouvelleUnite)
     }
     else
     {
-        player = ajoutEnTete(player, *nouvelleUnite);
+        player = ajoutEnFin(player, *nouvelleUnite);
     }
 
     return player;
@@ -492,40 +492,17 @@ void deplacement(TListePlayer player, int** chemin, TplateauJeu plateau)
 
             //On vérifie de combien on peut avancer l'unité suivant sa capacité de déplacement, si les cases sont occupées ou non et si la fin du chemin est atteinte
             int casesMax = 0;
-            /*
-            bool autreUniteAtteinte = false;
-            for(int i=0; i < currentUnit->vitessedeplacement && !autreUniteAtteinte; i++)
-            {
 
-                // On ne peut avancer que si on n'a pas atteint la dernière case du chemin
-                if(indiceCaseUnit + casesMax + 1 < NBCOORDPARCOURS)
-                {
-                    int coordx = chemin[indiceCaseUnit+i][X];
-                    int coordy = chemin[indiceCaseUnit+i][Y];
-
-                    // On ne peut avancer que si la case choisie est vide, sauf si la case est occupée par nous même
-                    printf("Origin: %d, %d. Coords: %d, %d\n", originX, originY, coordx, coordy);
-                    if( plateau[coordx][coordy] == NULL || (coordx == originX && coordy == originY) )
-                    {
-                        casesMax++;
-                    }
-                    else
-                    {
-                        autreUniteAtteinte = true;
-                    }
-                }
-            }
-            */
             while(indiceCaseUnit + casesMax + 1 < NBCOORDPARCOURS && // Vérifie si on ne va pas dépasser le bout du chemin
-                  /*plateau[chemin[indiceCaseUnit + casesMax][X]][chemin[indiceCaseUnit + casesMax][Y]] == NULL &&*/ // Vérifie si la case est libre
-                  casesMax <= currentUnit->vitessedeplacement) // Vérifie si on a atteint le nombre de cases maximum pour ce tour
+                    plateau[chemin[indiceCaseUnit + casesMax + 1][X]][chemin[indiceCaseUnit + casesMax + 1][Y]] == NULL && // Vérifie si la case est libre
+                    casesMax + 1 <= currentUnit->vitessedeplacement) // Vérifie si on a atteint le nombre de cases maximum pour ce tour
             {
                 casesMax++;
             }
 
             //On effectue le déplacement en changeant posX et posY dans l'unité
-            int newX = chemin[indiceCaseUnit+casesMax][X];
-            int newY = chemin[indiceCaseUnit+casesMax][Y];
+            int newX = chemin[indiceCaseUnit + (casesMax)][X];
+            int newY = chemin[indiceCaseUnit + (casesMax)][Y];
 
             currentUnit->posX = newX;
             currentUnit->posY = newY;
